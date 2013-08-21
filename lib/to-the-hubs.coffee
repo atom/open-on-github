@@ -1,4 +1,5 @@
-EditSession = require 'edit-session'
+child_process = require 'child_process'
+EditSession   = require 'edit-session'
 
 githubOpen = (editSession) ->
   gitUrl = git.getRepo().getConfigValue("remote.#{remoteName()}.url")
@@ -11,8 +12,7 @@ githubOpen = (editSession) ->
 
   blobUrl = "#{repoUrl}/blob/#{branch()}/#{path}"
 
-  exec = require('child_process').exec
-  exec "open #{blobUrl}", (error, stdout, stderr) ->
+  child_process.exec "open #{blobUrl}", (error, stdout, stderr) ->
     throw error if error?
 
 githubRepoUrl = (gitUrl) ->
