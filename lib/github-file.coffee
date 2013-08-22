@@ -10,11 +10,9 @@ class GitHubFile
 
   open: ->
     return unless @gitUrl() # TODO Log/notify if we're returning here?
+    return unless @githubRepoUrl() # TODO Log/notify if we're returning here?
 
-    repoUrl = @githubRepoUrl(@gitUrl())
-    return unless repoUrl? # TODO Log/notify if we're returning here?
-
-    blobUrl = "#{repoUrl}/blob/#{@branch()}/#{@filePath()}"
+    blobUrl = "#{@githubRepoUrl()}/blob/#{@branch()}/#{@filePath()}"
 
     child_process.exec "open #{blobUrl}", (error, stdout, stderr) ->
       throw error if error?
@@ -22,11 +20,12 @@ class GitHubFile
   gitUrl: ->
     git.getRepo().getConfigValue("remote.#{@remoteName()}.url")
 
-  githubRepoUrl: (gitUrl) ->
-    if gitUrl.match /https:\/\/github.com\// # e.g., https://github.com/foo/bar.git
-      gitUrl.replace(/\.git$/, '')
-    else if gitUrl.match /git@github.com/    # e.g., git@github.com:foo/bar.git
-      gitUrl.
+  githubRepoUrl: ->
+    url = @gitUrl()
+    if url.match /https:\/\/github.com\// # e.g., https://github.com/foo/bar.git
+      url.replace(/\.git$/, '')
+    else if url.match /git@github.com/    # e.g., git@github.com:foo/bar.git
+      url.
         replace(/^git@github.com:/, 'https://github.com/').
         replace(/\.git$/, '')
 
