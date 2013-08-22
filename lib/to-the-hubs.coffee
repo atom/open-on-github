@@ -1,39 +1,43 @@
 child_process = require 'child_process'
 EditSession   = require 'edit-session'
 
-githubOpen = (editSession) ->
-  gitUrl = git.getRepo().getConfigValue("remote.#{remoteName()}.url")
-  return unless gitUrl? # TODO Log/notify if we're returning here?
+class GitHubFile
+  @fromSession: (editSession) ->
+    new GitHubFile(editSession)
 
-  repoUrl = githubRepoUrl(gitUrl)
-  return unless repoUrl? # TODO Log/notify if we're returning here?
+  constructor: (@editSession) ->
 
-  path = filePath(editSession)
+  open: ->
+    gitUrl = git.getRepo().getConfigValue("remote.#{@remoteName()}.url")
+    return unless gitUrl? # TODO Log/notify if we're returning here?
 
-  blobUrl = "#{repoUrl}/blob/#{branch()}/#{path}"
+    repoUrl = @githubRepoUrl(gitUrl)
+    return unless repoUrl? # TODO Log/notify if we're returning here?
 
-  child_process.exec "open #{blobUrl}", (error, stdout, stderr) ->
-    throw error if error?
+    blobUrl = "#{repoUrl}/blob/#{@branch()}/#{@filePath()}"
 
-githubRepoUrl = (gitUrl) ->
-  if gitUrl.match /https:\/\/github.com\// # e.g., https://github.com/foo/bar.git
-    gitUrl.replace(/\.git$/, '')
-  else if gitUrl.match /git@github.com/    # e.g., git@github.com:foo/bar.git
-    gitUrl.
-      replace(/^git@github.com:/, 'https://github.com/').
-      replace(/\.git$/, '')
+    child_process.exec "open #{blobUrl}", (error, stdout, stderr) ->
+      throw error if error?
 
-filePath = (editSession) ->
-  git.relativize(editSession.getBuffer().getPath())
+  githubRepoUrl: (gitUrl) ->
+    if gitUrl.match /https:\/\/github.com\// # e.g., https://github.com/foo/bar.git
+      gitUrl.replace(/\.git$/, '')
+    else if gitUrl.match /git@github.com/    # e.g., git@github.com:foo/bar.git
+      gitUrl.
+        replace(/^git@github.com:/, 'https://github.com/').
+        replace(/\.git$/, '')
 
-remoteName = ->
-  refName = git.getRepo().getUpstreamBranch() # e.g., "refs/remotes/origin/master"
-  return null unless refName?
+  filePath: ->
+    git.relativize(@editSession.getBuffer().getPath())
 
-  refName.match(/^refs\/remotes\/(.*)\/.*$/)[1]
+  remoteName: ->
+    refName = git.getRepo().getUpstreamBranch() # e.g., "refs/remotes/origin/master"
+    return null unless refName?
 
-branch = ->
-  git.getShortHead()
+    refName.match(/^refs\/remotes\/(.*)\/.*$/)[1]
+
+  branch: ->
+    git.getShortHead()
 
 module.exports =
   activate: ->
@@ -41,11 +45,6 @@ module.exports =
 
     rootView.command 'github:open', ->
       paneItem = rootView.getActivePaneItem()
-      githubOpen(paneItem) if paneItem instanceof EditSession
+      return unless paneItem instanceof EditSession
 
-  githubOpen: githubOpen
-
-  # TODO Remove this from exports.
-  #      It's only exported so that I can test it.
-  #      So, how can I test this without it being in the exports?
-  githubRepoUrl: githubRepoUrl
+      GitHubFile.fromSession(paneItem).open()
