@@ -9,16 +9,18 @@ class GitHubFile
   constructor: (@editSession) ->
 
   open: ->
-    gitUrl = git.getRepo().getConfigValue("remote.#{@remoteName()}.url")
-    return unless gitUrl? # TODO Log/notify if we're returning here?
+    return unless @gitUrl() # TODO Log/notify if we're returning here?
 
-    repoUrl = @githubRepoUrl(gitUrl)
+    repoUrl = @githubRepoUrl(@gitUrl())
     return unless repoUrl? # TODO Log/notify if we're returning here?
 
     blobUrl = "#{repoUrl}/blob/#{@branch()}/#{@filePath()}"
 
     child_process.exec "open #{blobUrl}", (error, stdout, stderr) ->
       throw error if error?
+
+  gitUrl: ->
+    git.getRepo().getConfigValue("remote.#{@remoteName()}.url")
 
   githubRepoUrl: (gitUrl) ->
     if gitUrl.match /https:\/\/github.com\// # e.g., https://github.com/foo/bar.git
