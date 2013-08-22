@@ -12,10 +12,11 @@ class GitHubFile
     return unless @gitUrl() # TODO Log/notify if we're returning here?
     return unless @githubRepoUrl() # TODO Log/notify if we're returning here?
 
-    blobUrl = "#{@githubRepoUrl()}/blob/#{@branch()}/#{@filePath()}"
-
-    child_process.exec "open #{blobUrl}", (error, stdout, stderr) ->
+    child_process.exec "open #{@blobUrl()}", (error, stdout, stderr) ->
       throw error if error?
+
+  blobUrl: ->
+    "#{@githubRepoUrl()}/blob/#{@branch()}/#{@filePath()}"
 
   gitUrl: ->
     git.getRepo().getConfigValue("remote.#{@remoteName()}.url")
