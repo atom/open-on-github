@@ -9,8 +9,9 @@ class GitHubFile
   constructor: (@editSession) ->
 
   open: ->
-    return unless @gitUrl() # TODO Log/notify if we're returning here?
-    return unless @githubRepoUrl() # TODO Log/notify if we're returning here?
+    unless @isOpenable()
+      console.warn error for error in @validationErrors()
+      return
 
     child_process.exec "open #{@blobUrl()}", (error, stdout, stderr) ->
       throw error if error?
@@ -41,3 +42,18 @@ class GitHubFile
 
   branch: ->
     git.getShortHead()
+
+  isOpenable: ->
+    @validationErrors().length == 0
+
+  validationErrors: ->
+    unless @remoteName()
+      return ["No remote tracking branch exists for current branch (#{@branch()})"]
+
+    unless @gitUrl()
+      return ["No URL defined for remote (#{@remoteName()})"]
+
+    unless @githubRepoUrl()
+      return ["Remote URL is not hosted on GitHub.com (#{@gitUrl()})"]
+
+    []
