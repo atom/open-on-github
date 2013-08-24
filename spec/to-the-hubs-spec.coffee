@@ -19,7 +19,7 @@ describe "GitHubFile", ->
 
       expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
 
-    it "retuns undefined for a non-GitHub remote URL", ->
+    it "returns undefined for a non-GitHub remote URL", ->
       githubFile.gitUrl = ->
         "https://example.com/foo/bar.git"
 
