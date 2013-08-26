@@ -13,7 +13,10 @@ class GitHubFile
       console.warn error for error in @validationErrors()
       return
 
-    child_process.exec "open #{@blobUrl()}", (error, stdout, stderr) ->
+    @openUrlInBrowser(@blobUrl())
+
+  openUrlInBrowser: (url) ->
+    child_process.exec "open #{url}", (error, stdout, stderr) ->
       throw error if error?
 
   blobUrl: ->
