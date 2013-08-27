@@ -9,6 +9,7 @@ class GitHubFile
 
   # Internal
   constructor: (@editSession) ->
+    @repo = project.getRepo()
 
   # Public
   open: ->
@@ -45,7 +46,7 @@ class GitHubFile
 
   # Internal
   gitUrl: ->
-    git.getRepo().getConfigValue("remote.#{@remoteName()}.url")
+    @repo.getConfigValue("remote.#{@remoteName()}.url")
 
   # Internal
   githubRepoUrl: ->
@@ -59,15 +60,15 @@ class GitHubFile
 
   # Internal
   filePath: ->
-    git.relativize(@editSession.getBuffer().getPath())
+    @repo.relativize(@editSession.getBuffer().getPath())
 
   # Internal
   remoteName: ->
-    refName = git.getRepo().getUpstreamBranch() # e.g., "refs/remotes/origin/master"
+    refName = @repo.getRepo().getUpstreamBranch() # e.g., "refs/remotes/origin/master"
     return null unless refName?
 
     refName.match(/^refs\/remotes\/(.*)\/.*$/)[1]
 
   # Internal
   branch: ->
-    git.getShortHead()
+    @repo.getShortHead()

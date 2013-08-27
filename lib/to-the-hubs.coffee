@@ -3,7 +3,7 @@ GitHubFile  = require './github-file'
 
 module.exports =
   activate: ->
-    return unless git?
+    return unless project.getRepo()?
 
     rootView.command 'github:open', ->
       paneItem = rootView.getActivePaneItem()
