@@ -1,5 +1,4 @@
-child_process = require 'child_process'
-EditSession   = require 'edit-session'
+EditSession = require 'edit-session'
 
 module.exports =
 class GitHubFile
@@ -38,8 +37,7 @@ class GitHubFile
 
   # Internal
   openUrlInBrowser: (url) ->
-    child_process.exec "open #{url}", (error, stdout, stderr) ->
-      throw error if error?
+    require('shell').openExternal url
 
   # Internal
   blobUrl: ->
