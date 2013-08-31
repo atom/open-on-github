@@ -64,6 +64,11 @@ class GitHubFile
 
   # Internal
   remoteName: ->
+    # TODO: Once atom/atom#780 ships, we can simplify the line below, like so:
+    #
+    #   refName = @repo.getUpstreamBranch()
+    #
+    # See https://github.com/atom/atom/pull/780.
     refName = @repo.getRepo().getUpstreamBranch() # e.g., "refs/remotes/origin/master"
     return null unless refName?
 
