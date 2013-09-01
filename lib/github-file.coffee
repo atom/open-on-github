@@ -1,4 +1,5 @@
 EditSession = require 'edit-session'
+Shell = require 'shell'
 
 module.exports =
 class GitHubFile
@@ -14,7 +15,7 @@ class GitHubFile
   # Public
   open: ->
     unless @isOpenable()
-      console.warn error for error in @validationErrors()
+      @reportValidationErrors()
       return
 
     @openUrlInBrowser(@blobUrl())
@@ -37,8 +38,13 @@ class GitHubFile
     []
 
   # Internal
+  reportValidationErrors: ->
+    Shell.beep()
+    console.warn error for error in @validationErrors()
+
+  # Internal
   openUrlInBrowser: (url) ->
-    require('shell').openExternal url
+    Shell.openExternal url
 
   # Internal
   blobUrl: ->
