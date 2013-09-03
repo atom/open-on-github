@@ -1,4 +1,3 @@
-EditSession = require 'edit-session'
 GitHubFile  = require './github-file'
 
 module.exports =
@@ -6,7 +5,5 @@ module.exports =
     return unless project.getRepo()?
 
     rootView.command 'github:open', ->
-      paneItem = rootView.getActivePaneItem()
-      return unless paneItem instanceof EditSession
-
-      GitHubFile.fromSession(paneItem).open()
+      if itemPath = rootView.getActivePaneItem()?.getPath?()
+        GitHubFile.fromPath(itemPath).open()

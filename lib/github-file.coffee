@@ -1,15 +1,14 @@
-EditSession = require 'edit-session'
 Shell = require 'shell'
 
 module.exports =
 class GitHubFile
 
   # Public
-  @fromSession: (editSession) ->
-    new GitHubFile(editSession)
+  @fromPath: (filePath) ->
+    new GitHubFile(filePath)
 
   # Internal
-  constructor: (@editSession) ->
+  constructor: (@filePath) ->
     @repo = project.getRepo()
 
   # Public
@@ -48,7 +47,7 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@branch()}/#{@filePath()}"
+    "#{@githubRepoUrl()}/blob/#{@branch()}/#{@repoRelativePath()}"
 
   # Internal
   gitUrl: ->
@@ -65,8 +64,8 @@ class GitHubFile
         replace(/\.git$/, '')
 
   # Internal
-  filePath: ->
-    @repo.relativize(@editSession.getBuffer().getPath())
+  repoRelativePath: ->
+    @repo.relativize(@filePath)
 
   # Internal
   remoteName: ->

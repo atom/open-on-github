@@ -25,7 +25,7 @@ describe "GitHubFile", ->
     setupGithubFile = ->
       project.setPath(workingDirPath)
       editSession = project.open(filePathRelativeToWorkingDir)
-      githubFile = GitHubFile.fromSession(editSession)
+      githubFile = GitHubFile.fromPath(editSession.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
       fsUtils.move path.join(workingDirPath, '.git'), fixturePath(fixtureName)
