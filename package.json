@@ -1,6 +1,6 @@
 {
   "name": "to-the-hubs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "./lib/to-the-hubs",
   "description": "Open/blame the active editor on github.com",
   "repository": {
