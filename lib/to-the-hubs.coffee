@@ -7,3 +7,7 @@ module.exports =
     rootView.command 'github:open', ->
       if itemPath = rootView.getActivePaneItem()?.getPath?()
         GitHubFile.fromPath(itemPath).open()
+
+    rootView.command 'github:blame', ->
+      if itemPath = rootView.getActivePaneItem()?.getPath?()
+        GitHubFile.fromPath(itemPath).blame()

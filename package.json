@@ -1,6 +1,7 @@
 {
   "main": "./lib/to-the-hubs",
   "activationEvents": [
-    "github:open"
+    "github:open",
+    "github:blame"
   ]
 }

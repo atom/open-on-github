@@ -1,2 +1,3 @@
 'body':
   'ctrl-g o': 'github:open'
+  'ctrl-g b': 'github:blame'

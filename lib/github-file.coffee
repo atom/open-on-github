@@ -13,11 +13,17 @@ class GitHubFile
 
   # Public
   open: ->
-    unless @isOpenable()
+    if @isOpenable()
+      @openUrlInBrowser(@blobUrl())
+    else
       @reportValidationErrors()
-      return
 
-    @openUrlInBrowser(@blobUrl())
+  # Public
+  blame: ->
+    if @isOpenable()
+      @openUrlInBrowser(@blameUrl())
+    else
+      @reportValidationErrors()
 
   # Public
   isOpenable: ->
@@ -48,6 +54,10 @@ class GitHubFile
   # Internal
   blobUrl: ->
     "#{@githubRepoUrl()}/blob/#{@branch()}/#{@repoRelativePath()}"
+
+  # Internal
+  blameUrl: ->
+    "#{@githubRepoUrl()}/blame/#{@branch()}/#{@repoRelativePath()}"
 
   # Internal
   gitUrl: ->

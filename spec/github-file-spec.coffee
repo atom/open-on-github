@@ -4,7 +4,7 @@ fsUtils = require 'fs-utils'
 path = require 'path'
 
 describe "GitHubFile", ->
-  describe "open", ->
+  describe "commands", ->
     githubFile = null
     workingDirPath = '/tmp/to-the-hubs-working-dir'
     filePathRelativeToWorkingDir = 'some-dir/some-file.md'
@@ -31,55 +31,73 @@ describe "GitHubFile", ->
       fsUtils.move path.join(workingDirPath, '.git'), fixturePath(fixtureName)
       fsUtils.remove workingDirPath
 
-    describe "when the file is openable on GitHub.com", ->
-      fixtureName = 'github-remote'
+    describe "open", ->
+      describe "when the file is openable on GitHub.com", ->
+        fixtureName = 'github-remote'
 
-      beforeEach ->
-        setupWorkingDir(fixtureName)
-        githubFile = setupGithubFile()
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
 
-      afterEach ->
-        teardownWorkingDirAndRestoreFixture(fixtureName)
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
 
-      it "opens the GitHub.com blob URL for the file", ->
-        spyOn(githubFile, 'openUrlInBrowser')
-        githubFile.open()
-        expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-          'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
+        it "opens the GitHub.com blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
-    describe "when the local branch has no remote", ->
-      fixtureName = 'no-remote'
+      describe "when the local branch has no remote", ->
+        fixtureName = 'no-remote'
 
-      beforeEach ->
-        setupWorkingDir(fixtureName)
-        githubFile = setupGithubFile()
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
 
-      afterEach ->
-        teardownWorkingDirAndRestoreFixture(fixtureName)
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
 
-      it "logs an error", ->
-        spyOn(require('shell'), 'beep')
-        spyOn(console, 'warn')
-        githubFile.open()
-        expect(console.warn).toHaveBeenCalledWith \
-          'No remote tracking branch exists for current branch (master)'
+        it "logs an error", ->
+          spyOn(require('shell'), 'beep')
+          spyOn(console, 'warn')
+          githubFile.open()
+          expect(console.warn).toHaveBeenCalledWith \
+            'No remote tracking branch exists for current branch (master)'
 
-    describe "when the remote repo is not hosted on github.com", ->
-      fixtureName = 'non-github-remote'
+      describe "when the remote repo is not hosted on github.com", ->
+        fixtureName = 'non-github-remote'
 
-      beforeEach ->
-        setupWorkingDir(fixtureName)
-        githubFile = setupGithubFile()
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
 
-      afterEach ->
-        teardownWorkingDirAndRestoreFixture(fixtureName)
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
 
-      it "logs an error", ->
-        spyOn(require('shell'), 'beep')
-        spyOn(console, 'warn')
-        githubFile.open()
-        expect(console.warn).toHaveBeenCalledWith \
-          'Remote URL is not hosted on GitHub.com (https://git.example.com/some-user/some-repo.git)'
+        it "logs an error", ->
+          spyOn(require('shell'), 'beep')
+          spyOn(console, 'warn')
+          githubFile.open()
+          expect(console.warn).toHaveBeenCalledWith \
+            'Remote URL is not hosted on GitHub.com (https://git.example.com/some-user/some-repo.git)'
+
+    describe "blame", ->
+      describe "when the file is openable on GitHub.com", ->
+        fixtureName = 'github-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blame URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.blame()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
 
   describe "githubRepoUrl", ->
     githubFile = null
