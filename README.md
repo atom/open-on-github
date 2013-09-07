@@ -2,14 +2,14 @@
 
 Provides commands to quickly view the current file on GitHub.com (The Website).
 
-When editing a file in Atom, simply access the command palette to:
+## Usage
 
-- Open the file on github.com
-- Open the blame view for the file on github.com
+When editing a file in Atom, use the command palette or keyboard shortcuts to:
 
-# Usage
+- Open the file on github.com (control-g, o)
+- Open the blame view for the file on github.com (control-g, b)
 
-![Command Palette](https://f.cloud.github.com/assets/2988/998243/dffaac7e-09f7-11e3-8308-59a8a123e2f3.png)
+![Command Palette](https://f.cloud.github.com/assets/2988/1102071/227eae00-17fa-11e3-9662-df171b1533f5.png)
 
 ---
 
