@@ -1,3 +1,4 @@
 'body':
   'ctrl-g o': 'github:open'
   'ctrl-g b': 'github:blame'
+  'ctrl-g h': 'github:file-history'

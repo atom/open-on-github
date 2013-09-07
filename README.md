@@ -8,6 +8,7 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 
 - Open the file on github.com (control-g, o)
 - Open the blame view for the file on github.com (control-g, b)
+- Open the history view for the file on github.com (control-g, h)
 
 ![Command Palette](https://f.cloud.github.com/assets/2988/1102071/227eae00-17fa-11e3-9662-df171b1533f5.png)
 

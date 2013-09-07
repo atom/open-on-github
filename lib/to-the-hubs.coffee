@@ -11,3 +11,7 @@ module.exports =
     rootView.command 'github:blame', ->
       if itemPath = rootView.getActivePaneItem()?.getPath?()
         GitHubFile.fromPath(itemPath).blame()
+
+    rootView.command 'github:file-history', ->
+      if itemPath = rootView.getActivePaneItem()?.getPath?()
+        GitHubFile.fromPath(itemPath).history()

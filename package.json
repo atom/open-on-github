@@ -12,7 +12,8 @@
   },
   "activationEvents": [
     "github:open",
-    "github:blame"
+    "github:blame",
+    "github:file-history"
   ],
   "engines": {
     "atom": "*"
