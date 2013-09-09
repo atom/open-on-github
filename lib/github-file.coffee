@@ -25,6 +25,12 @@ class GitHubFile
     else
       @reportValidationErrors()
 
+  history: ->
+    if @isOpenable()
+      @openUrlInBrowser(@historyUrl())
+    else
+      @reportValidationErrors()
+
   # Public
   isOpenable: ->
     @validationErrors().length == 0
@@ -58,6 +64,10 @@ class GitHubFile
   # Internal
   blameUrl: ->
     "#{@githubRepoUrl()}/blame/#{@branch()}/#{@repoRelativePath()}"
+
+  # Internal
+  historyUrl: ->
+    "#{@githubRepoUrl()}/commits/#{@branch()}/#{@repoRelativePath()}"
 
   # Internal
   gitUrl: ->

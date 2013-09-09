@@ -12,3 +12,7 @@ module.exports =
       pane.command 'github:blame', ->
         if itemPath = rootView.getActivePaneItem()?.getPath?()
           GitHubFile.fromPath(itemPath).blame()
+
+      pane.command 'github:history', ->
+        if itemPath = rootView.getActivePaneItem()?.getPath?()
+          GitHubFile.fromPath(itemPath).history()
