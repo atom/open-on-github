@@ -99,6 +99,23 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
 
+    describe "history", ->
+      describe "when the file is openable on GitHub.com", ->
+        fixtureName = 'github-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blame URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.history()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md'
+
   describe "githubRepoUrl", ->
     githubFile = null
 
