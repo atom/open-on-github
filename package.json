@@ -2,7 +2,7 @@
   "name": "to-the-hubs",
   "version": "0.1.0",
   "main": "./lib/to-the-hubs",
-  "description": "Open/blame the active editor on github.com",
+  "description": "View the active file on github.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/atom/to-the-hubs.git"
