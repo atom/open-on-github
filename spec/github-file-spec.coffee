@@ -1,5 +1,4 @@
 GitHubFile = require '../lib/github-file'
-Project = require 'project'
 fsUtils = require 'fs-utils'
 path = require 'path'
 
