@@ -1,5 +1,5 @@
 GitHubFile = require '../lib/github-file'
-fsUtils = require 'fs-utils'
+{fs} = require 'atom-api'
 path = require 'path'
 
 describe "GitHubFile", ->
@@ -12,14 +12,14 @@ describe "GitHubFile", ->
       path.join(__dirname, "fixtures", "#{fixtureName}.git")
 
     setupWorkingDir = (fixtureName) ->
-      fsUtils.makeTree workingDirPath
-      fsUtils.move fixturePath(fixtureName), path.join(workingDirPath, '.git')
+      fs.makeTree workingDirPath
+      fs.move fixturePath(fixtureName), path.join(workingDirPath, '.git')
 
       subdirectoryPath = path.join(workingDirPath, 'some-dir')
-      fsUtils.makeTree subdirectoryPath
+      fs.makeTree subdirectoryPath
 
       filePath = path.join(subdirectoryPath, 'some-file.md')
-      fsUtils.writeSync filePath, 'some file content'
+      fs.writeSync filePath, 'some file content'
 
     setupGithubFile = ->
       project.setPath(workingDirPath)
@@ -27,8 +27,8 @@ describe "GitHubFile", ->
       githubFile = GitHubFile.fromPath(editSession.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
-      fsUtils.move path.join(workingDirPath, '.git'), fixturePath(fixtureName)
-      fsUtils.remove workingDirPath
+      fs.move path.join(workingDirPath, '.git'), fixturePath(fixtureName)
+      fs.remove workingDirPath
 
     describe "open", ->
       describe "when the file is openable on GitHub.com", ->
