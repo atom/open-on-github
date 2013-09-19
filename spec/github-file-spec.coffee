@@ -1,5 +1,5 @@
 GitHubFile = require '../lib/github-file'
-{fs} = require 'atom-api'
+{fs} = require 'atom'
 path = require 'path'
 
 describe "GitHubFile", ->
