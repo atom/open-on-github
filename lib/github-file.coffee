@@ -1,5 +1,4 @@
 {Range} = require 'atom'
-Shell = require 'shell'
 
 module.exports =
 class GitHubFile
@@ -66,7 +65,7 @@ class GitHubFile
 
   # Internal
   reportValidationErrors: ->
-    Shell.beep()
+    atom.beep()
     console.warn error for error in @validationErrors()
 
   # Internal

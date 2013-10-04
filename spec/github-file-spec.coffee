@@ -58,7 +58,7 @@ describe "GitHubFile", ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
         it "logs an error", ->
-          spyOn(require('shell'), 'beep')
+          spyOn(atom, 'beep')
           spyOn(console, 'warn')
           githubFile.open()
           expect(console.warn).toHaveBeenCalledWith \
@@ -75,7 +75,7 @@ describe "GitHubFile", ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
         it "logs an error", ->
-          spyOn(require('shell'), 'beep')
+          spyOn(atom, 'beep')
           spyOn(console, 'warn')
           githubFile.open()
           expect(console.warn).toHaveBeenCalledWith \
