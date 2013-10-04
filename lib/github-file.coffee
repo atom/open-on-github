@@ -1,3 +1,4 @@
+Shell = require 'shell'
 {Range} = require 'atom'
 
 module.exports =
