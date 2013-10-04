@@ -16,3 +16,9 @@ module.exports =
       pane.command 'github:history', ->
         if itemPath = rootView.getActivePaneItem()?.getPath?()
           GitHubFile.fromPath(itemPath).history()
+
+      pane.command 'github:copy-url', ->
+        activeItem = rootView.getActivePaneItem()
+        if itemPath = activeItem.getPath?()
+          range = activeItem.getSelection?()?.getBufferRange?()
+          GitHubFile.fromPath(itemPath).copyUrl(range)
