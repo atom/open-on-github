@@ -2,3 +2,4 @@
   'ctrl-g o': 'github:open'
   'ctrl-g b': 'github:blame'
   'ctrl-g h': 'github:history'
+  'ctrl-g c': 'github:copy-url'

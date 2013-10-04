@@ -13,7 +13,8 @@
   "activationEvents": [
     "github:open",
     "github:blame",
-    "github:history"
+    "github:history",
+    "github:copy-url"
   ],
   "engines": {
     "atom": "*"
