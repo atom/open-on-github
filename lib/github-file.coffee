@@ -1,3 +1,4 @@
+{Range} = require 'atom'
 Shell = require 'shell'
 
 module.exports =
@@ -28,6 +29,21 @@ class GitHubFile
   history: ->
     if @isOpenable()
       @openUrlInBrowser(@historyUrl())
+    else
+      @reportValidationErrors()
+
+  copyUrl: (lineRange) ->
+    if @isOpenable()
+      url = @blobUrl()
+      if lineRange
+        lineRange = Range.fromObject(lineRange)
+        startRow = lineRange.start.row + 1
+        endRow = lineRange.end.row + 1
+        if startRow is endRow
+          url += "#L#{startRow}"
+        else
+          url += "#L#{startRow}-L#{endRow}"
+      atom.pasteboard.write(url)
     else
       @reportValidationErrors()
 

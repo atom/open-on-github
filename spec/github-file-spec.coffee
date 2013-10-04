@@ -115,6 +115,26 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md'
 
+    describe "copyUrl", ->
+      fixtureName = 'github-remote'
+
+      beforeEach ->
+        setupWorkingDir(fixtureName)
+        githubFile = setupGithubFile()
+
+      afterEach ->
+        teardownWorkingDirAndRestoreFixture(fixtureName)
+
+      describe "when text is selected", ->
+        it "copies the URL to the pasteboard with the selection range in the hash", ->
+          githubFile.copyUrl([[0, 0], [1, 1]])
+          expect(pasteboard.read()[0]).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2'
+
+      describe "when no text is selected", ->
+        it "copies the URL to the pasteboard with the cursor location in the hash", ->
+          githubFile.copyUrl([[2, 1], [2, 1]])
+          expect(pasteboard.read()[0]).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L3'
+
   describe "githubRepoUrl", ->
     githubFile = null
 
