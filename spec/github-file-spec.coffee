@@ -47,7 +47,23 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
-      describe "when the local branch has no remote", ->
+      describe "when the local branch is not tracked", ->
+        fixtureName = 'non-tracked-branch'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blob/non-tracked-branch/some-dir/some-file.md'
+
+      describe "when there is no remote", ->
         fixtureName = 'no-remote'
 
         beforeEach ->
@@ -62,7 +78,7 @@ describe "GitHubFile", ->
           spyOn(console, 'warn')
           githubFile.open()
           expect(console.warn).toHaveBeenCalledWith \
-            'No remote tracking branch exists for current branch (master)'
+            'No URL defined for remote (null)'
 
       describe "when the remote repo is not hosted on github.com", ->
         fixtureName = 'non-github-remote'
