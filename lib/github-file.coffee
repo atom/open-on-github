@@ -53,9 +53,6 @@ class GitHubFile
 
   # Public
   validationErrors: ->
-    unless @remoteName()
-      return ["No remote tracking branch exists for current branch (#{@branch()})"]
-
     unless @gitUrl()
       return ["No URL defined for remote (#{@remoteName()})"]
 
@@ -87,7 +84,8 @@ class GitHubFile
 
   # Internal
   gitUrl: ->
-    @repo.getConfigValue("remote.#{@remoteName()}.url")
+    remoteOrBestGuess = @remoteName() || 'origin'
+    @repo.getConfigValue("remote.#{remoteOrBestGuess}.url")
 
   # Internal
   githubRepoUrl: ->
