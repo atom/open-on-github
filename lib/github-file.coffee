@@ -84,8 +84,8 @@ class GitHubFile
 
   # Internal
   gitUrl: ->
-    remote = @remoteName() || 'origin'
-    @repo.getConfigValue("remote.#{remote}.url")
+    remoteOrBestGuess = @remoteName() || 'origin'
+    @repo.getConfigValue("remote.#{remoteOrBestGuess}.url")
 
   # Internal
   githubRepoUrl: ->
