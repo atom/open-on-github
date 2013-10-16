@@ -1,6 +1,6 @@
 {
   "name": "to-the-hubs",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "./lib/to-the-hubs",
   "description": "View the active file on github.com",
   "repository": {
