@@ -23,7 +23,7 @@ describe "GitHubFile", ->
 
     setupGithubFile = ->
       project.setPath(workingDirPath)
-      editSession = project.open(filePathRelativeToWorkingDir)
+      editSession = project.openSync(filePathRelativeToWorkingDir)
       githubFile = GitHubFile.fromPath(editSession.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
