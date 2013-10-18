@@ -1,0 +1,12 @@
+'menu': [
+    'label': 'Packages'
+    'submenu': [
+      'label': 'GitHub'
+      'submenu': [
+        { 'label': 'Open on GitHub', 'command': 'github:open' }
+        { 'label': 'Blame on GitHub', 'command': 'github:blame' }
+        { 'label': 'History on GitHub', 'command': 'github:history' }
+        { 'label': 'Copy URL on GitHub', 'command': 'github:copy-url' }
+      ]
+    ]
+]
