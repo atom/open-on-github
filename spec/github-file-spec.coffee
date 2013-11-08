@@ -1,22 +1,24 @@
 GitHubFile = require '../lib/github-file'
 {fs} = require 'atom'
 path = require 'path'
+os = require 'os'
 
 describe "GitHubFile", ->
   describe "commands", ->
     githubFile = null
-    workingDirPath = '/tmp/to-the-hubs-working-dir'
+    editSession = null
+    workingDirPath = path.join(os.tmpdir(), 'to-the-hubs-working-dir')
     filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
     fixturePath = (fixtureName) ->
       path.join(__dirname, "fixtures", "#{fixtureName}.git")
 
     setupWorkingDir = (fixtureName) ->
-      fs.makeTree workingDirPath
-      fs.move fixturePath(fixtureName), path.join(workingDirPath, '.git')
+      fs.makeTreeSync workingDirPath
+      fs.copySync fixturePath(fixtureName), path.join(workingDirPath, '.git')
 
       subdirectoryPath = path.join(workingDirPath, 'some-dir')
-      fs.makeTree subdirectoryPath
+      fs.makeTreeSync subdirectoryPath
 
       filePath = path.join(subdirectoryPath, 'some-file.md')
       fs.writeSync filePath, 'some file content'
@@ -27,8 +29,25 @@ describe "GitHubFile", ->
       githubFile = GitHubFile.fromPath(editSession.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
-      fs.move path.join(workingDirPath, '.git'), fixturePath(fixtureName)
-      fs.remove workingDirPath
+      success = null
+
+      # On Windows, you can not remove a watched directory/file, therefore we
+      # have to close the project before attempting to delete. Unfortunately,
+      # Pathwatcher's close function is also not synchronous. Once
+      # atom/node-pathwatcher#4 is implemented this should be alot cleaner.
+      runs ->
+        project.destroy()
+
+        repeat = setInterval ->
+          try
+            fs.removeSync(workingDirPath)
+            clearInterval(repeat)
+            success = true
+          catch e
+            success = false
+        , 50
+
+      waitsFor -> success
 
     describe "open", ->
       describe "when the file is openable on GitHub.com", ->
