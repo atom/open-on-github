@@ -24,8 +24,8 @@ describe "GitHubFile", ->
       fs.writeFileSync filePath, 'some file content'
 
     setupGithubFile = ->
-      project.setPath(workingDirPath)
-      editSession = project.openSync(filePathRelativeToWorkingDir)
+      atom.project.setPath(workingDirPath)
+      editSession = atom.project.openSync(filePathRelativeToWorkingDir)
       githubFile = GitHubFile.fromPath(editSession.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->

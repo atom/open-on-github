@@ -2,23 +2,27 @@ GitHubFile  = require './github-file'
 
 module.exports =
   activate: ->
-    return unless project.getRepo()?
+    return unless atom.project.getRepo()?
 
-    rootView.eachPane (pane) ->
+    atom.rootView.eachPane (pane) ->
       pane.command 'github:open', ->
-        if itemPath = rootView.getActivePaneItem()?.getPath?()
+        if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).open()
 
       pane.command 'github:blame', ->
-        if itemPath = rootView.getActivePaneItem()?.getPath?()
+        if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).blame()
 
       pane.command 'github:history', ->
-        if itemPath = rootView.getActivePaneItem()?.getPath?()
+        if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).history()
 
       pane.command 'github:copy-url', ->
-        activeItem = rootView.getActivePaneItem()
-        if itemPath = activeItem.getPath?()
-          range = activeItem.getSelection?()?.getBufferRange?()
-          GitHubFile.fromPath(itemPath).copyUrl(range)
+        if itemPath = getActivePath()
+          GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())
+
+getActivePath = ->
+  atom.rootView.getActivePaneItem()?.getPath?()
+
+getSelectedRange = ->
+  atom.rootView.getActivePaneItem()?.getSelectedBufferRange?()
