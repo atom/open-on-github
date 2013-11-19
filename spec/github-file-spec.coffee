@@ -21,7 +21,7 @@ describe "GitHubFile", ->
       fs.makeTreeSync subdirectoryPath
 
       filePath = path.join(subdirectoryPath, 'some-file.md')
-      fs.writeSync filePath, 'some file content'
+      fs.writeFileSync filePath, 'some file content'
 
     setupGithubFile = ->
       project.setPath(workingDirPath)
