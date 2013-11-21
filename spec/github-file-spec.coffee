@@ -36,7 +36,7 @@ describe "GitHubFile", ->
       # Pathwatcher's close function is also not synchronous. Once
       # atom/node-pathwatcher#4 is implemented this should be alot cleaner.
       runs ->
-        project.destroy()
+        atom.project.destroy()
 
         repeat = setInterval ->
           try
