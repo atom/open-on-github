@@ -6,7 +6,7 @@ os = require 'os'
 describe "GitHubFile", ->
   describe "commands", ->
     githubFile = null
-    editSession = null
+    editor = null
     workingDirPath = path.join(os.tmpdir(), 'to-the-hubs-working-dir')
     filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
@@ -25,8 +25,8 @@ describe "GitHubFile", ->
 
     setupGithubFile = ->
       atom.project.setPath(workingDirPath)
-      editSession = atom.project.openSync(filePathRelativeToWorkingDir)
-      githubFile = GitHubFile.fromPath(editSession.getPath())
+      editor = atom.project.openSync(filePathRelativeToWorkingDir)
+      githubFile = GitHubFile.fromPath(editor.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
       success = null
