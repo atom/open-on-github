@@ -3,13 +3,7 @@
   "version": "0.15.0",
   "main": "./lib/to-the-hubs",
   "description": "View the active file on github.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/atom/to-the-hubs.git"
-  },
-  "bugs": {
-    "url": "https://github.com/atom/to-the-hubs/issues"
-  },
+  "repository": "https://github.com/atom/to-the-hubs",
   "activationEvents": [
     "github:open",
     "github:blame",
@@ -18,8 +12,5 @@
   ],
   "engines": {
     "atom": "*"
-  },
-  "publishConfig": {
-    "registry": "https://atom.cloudant.com/registry/_design/app/_rewrite"
   }
 }
