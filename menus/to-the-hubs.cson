@@ -6,7 +6,7 @@
         { 'label': 'Open on GitHub', 'command': 'github:open' }
         { 'label': 'Blame on GitHub', 'command': 'github:blame' }
         { 'label': 'History on GitHub', 'command': 'github:history' }
-        { 'label': 'Copy URL on GitHub', 'command': 'github:copy-url' }
+        { 'label': 'Copy GitHub URL', 'command': 'github:copy-url' }
       ]
     ]
 ]
