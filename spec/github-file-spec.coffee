@@ -109,12 +109,11 @@ describe "GitHubFile", ->
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "logs an error", ->
-          spyOn(atom, 'beep')
-          spyOn(console, 'warn')
+        it "opens a GitHub enterprise style blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
           githubFile.open()
-          expect(console.warn).toHaveBeenCalledWith \
-            'Remote URL is not hosted on GitHub.com (https://git.example.com/some-user/some-repo.git)'
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md'
 
     describe "blame", ->
       describe "when the file is openable on GitHub.com", ->
@@ -184,9 +183,13 @@ describe "GitHubFile", ->
     it "returns the GitHub.com URL for an SSH remote URL", ->
       githubFile.gitUrl = ->
         "git@github.com:foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
 
-    it "returns undefined for a non-GitHub remote URL", ->
+    it "returns a GitHub enterprise URL for a non-Github.com remote URL", ->
       githubFile.gitUrl = ->
-        "https://example.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+        "https://git.enterprize.me/foo/bar.git"
+      expect(githubFile.githubRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
+
+      githubFile.gitUrl = ->
+        "git@git.enterprize.me:foo/bar.git"
+      expect(githubFile.githubRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
