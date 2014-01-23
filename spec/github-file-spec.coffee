@@ -100,7 +100,7 @@ describe "GitHubFile", ->
             'No URL defined for remote (null)'
 
       describe "when the remote repo is not hosted on github.com", ->
-        fixtureName = 'non-github-remote'
+        fixtureName = 'github-enterprise-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
