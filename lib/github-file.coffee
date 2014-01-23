@@ -90,12 +90,11 @@ class GitHubFile
   # Internal
   githubRepoUrl: ->
     url = @gitUrl()
-    if url.match /https:\/\/github.com\// # e.g., https://github.com/foo/bar.git
+    if url.match /https:\/\/[^\/]+\// # e.g., https://github.com/foo/bar.git
       url.replace(/\.git$/, '')
-    else if url.match /git@github.com/    # e.g., git@github.com:foo/bar.git
-      url.
-        replace(/^git@github.com:/, 'https://github.com/').
-        replace(/\.git$/, '')
+    else if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
+      url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
+        "http://#{host}/#{repoPath}".replace(/\.git$/, '')
 
   # Internal
   repoRelativePath: ->
