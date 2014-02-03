@@ -43,7 +43,7 @@ class GitHubFile
           url += "#L#{startRow}"
         else
           url += "#L#{startRow}-L#{endRow}"
-      atom.pasteboard.write(url)
+      atom.clipboard.write(url)
     else
       @reportValidationErrors()
 
