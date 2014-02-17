@@ -1,17 +1,20 @@
 GitHubFile  = require './github-file'
 
 module.exports =
+  configDefaults:
+    includeLineNumbersInUrls: true
+
   activate: ->
     return unless atom.project.getRepo()?
 
     atom.workspaceView.eachPane (pane) ->
       pane.command 'open-on-github:file', ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).open()
+          GitHubFile.fromPath(itemPath).open(getSelectedRange())
 
       pane.command 'open-on-github:blame', ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).blame()
+          GitHubFile.fromPath(itemPath).blame(getSelectedRange())
 
       pane.command 'open-on-github:history', ->
         if itemPath = getActivePath()

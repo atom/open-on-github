@@ -20,32 +20,36 @@ class GitHubFile
       @reportValidationErrors()
 
   # Public
-  blame: ->
+  blame: (lineRange) ->
     if @isOpenable()
-      @openUrlInBrowser(@blameUrl())
+      @openUrlInBrowser(@blameUrl() + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
-  history: ->
+  history: (lineRange) ->
     if @isOpenable()
-      @openUrlInBrowser(@historyUrl())
+      @openUrlInBrowser(@historyUrl() + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
   copyUrl: (lineRange) ->
     if @isOpenable()
       url = @blobUrl()
-      if lineRange
-        lineRange = Range.fromObject(lineRange)
-        startRow = lineRange.start.row + 1
-        endRow = lineRange.end.row + 1
-        if startRow is endRow
-          url += "#L#{startRow}"
-        else
-          url += "#L#{startRow}-L#{endRow}"
-      atom.clipboard.write(url)
+      atom.clipboard.write(url + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
+
+  getLineRangeSuffix: (lineRange) ->
+    if lineRange and atom.config.get('open-on-github.includeLineNumbersInUrls')
+      lineRange = Range.fromObject(lineRange)
+      startRow = lineRange.start.row + 1
+      endRow = lineRange.end.row + 1
+      if startRow is endRow
+        "#L#{startRow}"
+      else
+        "#L#{startRow}-L#{endRow}"
+    else
+      ''
 
   # Public
   isOpenable: ->
