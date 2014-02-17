@@ -5,7 +5,7 @@ module.exports =
     return unless atom.project.getRepo()?
 
     atom.workspaceView.eachPane (pane) ->
-      pane.command 'github:open', ->
+      pane.command 'github:file', ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).open()
 

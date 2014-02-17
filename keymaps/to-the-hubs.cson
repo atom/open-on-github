@@ -1,5 +1,5 @@
 '.workspace':
-  'alt-g o': 'open-on-github:open'
+  'alt-g o': 'open-on-github:file'
   'alt-g b': 'open-on-github:blame'
   'alt-g h': 'open-on-github:history'
   'alt-g c': 'open-on-github:copy-url'
