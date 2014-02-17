@@ -7,7 +7,7 @@ describe "GitHubFile", ->
   describe "commands", ->
     githubFile = null
     editor = null
-    workingDirPath = path.join(os.tmpdir(), 'to-the-hubs-working-dir')
+    workingDirPath = path.join(os.tmpdir(), 'open-on-github-working-dir')
     filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
     fixturePath = (fixtureName) ->
