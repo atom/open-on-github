@@ -1,4 +1,4 @@
-# To The 'Hubs
+# Open on GitHub
 
 Provides commands to quickly view the current file on GitHub.com (The Website).
 
