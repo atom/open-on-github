@@ -1,14 +1,14 @@
 {
-  "name": "to-the-hubs",
+  "name": "open-on-github",
   "version": "0.19.0",
-  "main": "./lib/to-the-hubs",
+  "main": "./lib/open-on-github",
   "description": "View the active file on github.com",
-  "repository": "https://github.com/atom/to-the-hubs",
+  "repository": "https://github.com/atom/open-on-github",
   "activationEvents": [
-    "github:open",
-    "github:blame",
-    "github:history",
-    "github:copy-url"
+    "open-on-github:file",
+    "open-on-github:blame",
+    "open-on-github:history",
+    "open-on-github:copy-url"
   ],
   "engines": {
     "atom": "*"
