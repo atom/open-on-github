@@ -154,6 +154,7 @@ describe "GitHubFile", ->
 
       beforeEach ->
         setupWorkingDir(fixtureName)
+        atom.config.set('open-on-github.includeLineNumbersInUrls', true)
         githubFile = setupGithubFile()
 
       afterEach ->
