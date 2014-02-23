@@ -11,7 +11,7 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 - Open the history view for the file on github.com `alt-g, h`
 - Copy the github.com URL for the currently selected lines `alt-g, c`
 
-![Command Palette](https://f.cloud.github.com/assets/2988/1764166/fccd1c42-6721-11e3-9e7c-e3599bdf45ce.png)
+![Command Palette](https://f.cloud.github.com/assets/671378/2241755/23cb72f8-9ce2-11e3-9109-36c76a030f6a.png)
 
 ---
 
