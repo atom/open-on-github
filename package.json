@@ -13,5 +13,8 @@
   ],
   "engines": {
     "atom": "*"
+  },
+  "dependencies": {
+    "fs-plus": "2.x"
   }
 }

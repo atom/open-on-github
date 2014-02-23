@@ -1,5 +1,5 @@
 GitHubFile = require '../lib/github-file'
-{fs} = require 'atom'
+fs = require 'fs-plus'
 path = require 'path'
 os = require 'os'
 
