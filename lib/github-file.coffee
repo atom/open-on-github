@@ -113,4 +113,5 @@ class GitHubFile
 
   # Internal
   branch: ->
-    @repo.getShortHead()
+    refName = @repo.getUpstreamBranch() # e.g., "refs/remotes/origin/master"
+    refName?.match(/^refs\/remotes\/.*\/(.*)$/)?[1] or @repo.getShortHead()
