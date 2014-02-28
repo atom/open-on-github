@@ -88,7 +88,7 @@ class GitHubFile
 
   # Internal
   gitUrl: ->
-    remoteOrBestGuess = @remoteName() or 'origin'
+    remoteOrBestGuess = @remoteName() ? 'origin'
     @repo.getConfigValue("remote.#{remoteOrBestGuess}.url")
 
   # Internal
@@ -107,9 +107,9 @@ class GitHubFile
   # Internal
   remoteName: ->
     refName = @repo.getUpstreamBranch() # e.g., "refs/remotes/origin/master"
-    refName?.match(/^refs\/remotes\/(.*)\/.*$/)?[1]
+    refName?.match(/^refs\/remotes\/(.+)\/.*$/)?[1] ? null
 
   # Internal
   branch: ->
     refName = @repo.getUpstreamBranch() # e.g., "refs/remotes/origin/master"
-    refName?.match(/^refs\/remotes\/.*\/(.*)$/)?[1] or @repo.getShortHead()
+    refName?.match(/^refs\/remotes\/.*\/(.+)$/)?[1] ? @repo.getShortHead()
