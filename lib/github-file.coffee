@@ -99,6 +99,8 @@ class GitHubFile
     else if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
       url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
         "http://#{host}/#{repoPath}".replace(/\.git$/, '')
+    else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
+      "http#{url.substring(3).replace(/\.git$/, '')}"
 
   # Internal
   repoRelativePath: ->

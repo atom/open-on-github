@@ -194,3 +194,8 @@ describe "GitHubFile", ->
       githubFile.gitUrl = ->
         "git@git.enterprize.me:foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
+
+    it "returns the GitHub.com URL for a git:// URL", ->
+      githubFile.gitUrl = ->
+        "git://github.com/foo/bar.git"
+      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
