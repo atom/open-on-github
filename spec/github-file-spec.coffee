@@ -66,25 +66,37 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
-        describe "when the branch has a '/' in its name", ->
-          it "opens the GitHub.com blob URL for the file", ->
-            githubFile.repo.getShortHead = -> "foo/bar"
-            githubFile.repo.getUpstreamBranch = -> "refs/remotes/origin/foo/bar"
+      describe "when the branch has a '/' in its name", ->
+        fixtureName = 'branch-with-slash-in-name'
 
-            spyOn(githubFile, 'openUrlInBrowser')
-            githubFile.open()
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-              'https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md'
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
 
-        describe "when the remote has a '/' in its name", ->
-          it "opens the GitHub.com blob URL for the file", ->
-            githubFile.repo.getShortHead = -> "baz"
-            githubFile.repo.getUpstreamBranch = -> "refs/remotes/upstream/color/baz"
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
 
-            spyOn(githubFile, 'openUrlInBrowser')
-            githubFile.open()
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-              'https://github.com/some-other-user/some-other-repo/blob/baz/some-dir/some-file.md'
+        it "opens the GitHub.com blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md'
+
+      describe "when the remote has a '/' in its name", ->
+        fixtureName = 'remote-with-slash-in-name'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blob/baz/some-dir/some-file.md'
 
       describe "when the local branch is not tracked", ->
         fixtureName = 'non-tracked-branch'
