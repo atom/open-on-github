@@ -108,10 +108,21 @@ class GitHubFile
 
   # Internal
   remoteName: ->
-    refName = @repo.getUpstreamBranch() # e.g., "refs/remotes/origin/master"
-    refName?.match(/^refs\/remotes\/(.+)\/.*$/)?[1] ? null
+    shortBranch = @repo.getShortHead()
+    return null unless shortBranch
+
+    branchRemote = @repo.getConfigValue("branch.#{shortBranch}.remote")
+    return null unless branchRemote?.length > 0
+
+    branchRemote
 
   # Internal
   branch: ->
-    refName = @repo.getUpstreamBranch() # e.g., "refs/remotes/origin/master"
-    refName?.match(/^refs\/remotes\/.*\/(.+)$/)?[1] ? @repo.getShortHead()
+    shortBranch = @repo.getShortHead()
+    return null unless shortBranch
+
+    branchMerge = @repo.getConfigValue("branch.#{shortBranch}.merge")
+    return shortBranch unless branchMerge?.length > 11
+    return shortBranch unless branchMerge.indexOf('refs/heads/') is 0
+
+    branchMerge.substring(11)
