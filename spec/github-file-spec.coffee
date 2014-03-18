@@ -66,6 +66,38 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
+      describe "when the branch has a '/' in its name", ->
+        fixtureName = 'branch-with-slash-in-name'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md'
+
+      describe "when the remote has a '/' in its name", ->
+        fixtureName = 'remote-with-slash-in-name'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blob/baz/some-dir/some-file.md'
+
       describe "when the local branch is not tracked", ->
         fixtureName = 'non-tracked-branch'
 
