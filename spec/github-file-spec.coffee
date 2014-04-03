@@ -172,6 +172,14 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
 
+        describe "when text is selected", ->
+          it "opens the GitHub.com blame URL for the file with the selection range in the hash", ->
+            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
+            spyOn(githubFile, 'openUrlInBrowser')
+            githubFile.blame([[0, 0], [1, 1]])
+            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+              'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2'
+
     describe "branchCompare", ->
       describe "when the file is openable on GitHub.com", ->
         fixtureName = 'github-remote'
@@ -200,7 +208,7 @@ describe "GitHubFile", ->
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com blame URL for the file", ->
+        it "opens the GitHub.com history URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.history()
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
