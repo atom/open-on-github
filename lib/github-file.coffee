@@ -13,9 +13,9 @@ class GitHubFile
     @repo = atom.project.getRepo()
 
   # Public
-  open: ->
+  open: (lineRange) ->
     if @isOpenable()
-      @openUrlInBrowser(@blobUrl())
+      @openUrlInBrowser(@blobUrl() + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
