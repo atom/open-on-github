@@ -26,9 +26,9 @@ class GitHubFile
     else
       @reportValidationErrors()
 
-  history: (lineRange) ->
+  history: ->
     if @isOpenable()
-      @openUrlInBrowser(@historyUrl() + @getLineRangeSuffix(lineRange))
+      @openUrlInBrowser(@historyUrl())
     else
       @reportValidationErrors()
 
