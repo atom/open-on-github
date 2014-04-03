@@ -3,3 +3,4 @@
   'alt-g b': 'open-on-github:blame'
   'alt-g h': 'open-on-github:history'
   'alt-g c': 'open-on-github:copy-url'
+  'alt-g r': 'open-on-github:branch-compare'

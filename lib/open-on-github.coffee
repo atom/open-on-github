@@ -24,6 +24,10 @@ module.exports =
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())
 
+      pane.command 'open-on-github:branch-compare', ->
+        if itemPath = atom.project.getPath()
+          GitHubFile.fromPath(itemPath).openBranchCompare()
+
 getActivePath = ->
   atom.workspaceView.getActivePaneItem()?.getPath?()
 

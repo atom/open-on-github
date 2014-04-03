@@ -164,6 +164,23 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
 
+    describe "branchCompare", ->
+      describe "when the file is openable on GitHub.com", ->
+        fixtureName = 'github-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com branch compare URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.openBranchCompare()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/compare/master'
+
     describe "history", ->
       describe "when the file is openable on GitHub.com", ->
         fixtureName = 'github-remote'

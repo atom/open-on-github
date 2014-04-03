@@ -39,6 +39,12 @@ class GitHubFile
     else
       @reportValidationErrors()
 
+  openBranchCompare: ->
+    if @isOpenable()
+      @openUrlInBrowser(@branchCompareUrl())
+    else
+      @reportValidationErrors()
+
   getLineRangeSuffix: (lineRange) ->
     if lineRange and atom.config.get('open-on-github.includeLineNumbersInUrls')
       lineRange = Range.fromObject(lineRange)
@@ -76,15 +82,19 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@branch()}/#{@repoRelativePath()}"
+    "#{@githubRepoUrl()}/blob/#{@branchName()}/#{@repoRelativePath()}"
 
   # Internal
   blameUrl: ->
-    "#{@githubRepoUrl()}/blame/#{@branch()}/#{@repoRelativePath()}"
+    "#{@githubRepoUrl()}/blame/#{@branchName()}/#{@repoRelativePath()}"
 
   # Internal
   historyUrl: ->
-    "#{@githubRepoUrl()}/commits/#{@branch()}/#{@repoRelativePath()}"
+    "#{@githubRepoUrl()}/commits/#{@branchName()}/#{@repoRelativePath()}"
+
+  # Internal
+  branchCompareUrl: ->
+    "#{@githubRepoUrl()}/compare/#{@branchName()}"
 
   # Internal
   gitUrl: ->
@@ -117,7 +127,7 @@ class GitHubFile
     branchRemote
 
   # Internal
-  branch: ->
+  branchName: ->
     shortBranch = @repo.getShortHead()
     return null unless shortBranch
 

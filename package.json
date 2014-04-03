@@ -9,7 +9,8 @@
     "open-on-github:file",
     "open-on-github:blame",
     "open-on-github:history",
-    "open-on-github:copy-url"
+    "open-on-github:copy-url",
+    "open-on-github:branch-compare"
   ],
   "engines": {
     "atom": "*"

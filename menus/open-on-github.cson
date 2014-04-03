@@ -5,6 +5,7 @@
       'label': 'Open On GitHub'
       'submenu': [
         { 'label': 'Blame', 'command': 'open-on-github:blame' }
+        { 'label': 'Branch Compare', 'command': 'open-on-github:branch-compare' }
         { 'label': 'Copy URL', 'command': 'open-on-github:copy-url' }
         { 'label': 'File', 'command': 'open-on-github:file' }
         { 'label': 'History', 'command': 'open-on-github:history' }
