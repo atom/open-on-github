@@ -1,5 +1,6 @@
 Shell = require 'shell'
 {Range} = require 'atom'
+parseUrl = require('url').parse
 
 module.exports =
 class GitHubFile
@@ -105,12 +106,21 @@ class GitHubFile
   githubRepoUrl: ->
     url = @gitUrl()
     if url.match /https:\/\/[^\/]+\// # e.g., https://github.com/foo/bar.git
-      url.replace(/\.git$/, '')
+      url = url.replace(/\.git$/, '')
     else if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
-      url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
+      url = url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
         "http://#{host}/#{repoPath}".replace(/\.git$/, '')
     else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
-      "http#{url.substring(3).replace(/\.git$/, '')}"
+      url = "http#{url.substring(3).replace(/\.git$/, '')}"
+
+    return url unless @isBitbucketUrl(url)
+
+  isBitbucketUrl: (url) ->
+    return true if url.indexOf('git@bitbucket.org') is 0
+
+    try
+      {host} = parseUrl(url)
+      host is 'bitbucket.org'
 
   # Internal
   repoRelativePath: ->

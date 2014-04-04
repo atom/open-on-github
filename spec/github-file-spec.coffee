@@ -242,25 +242,33 @@ describe "GitHubFile", ->
       githubFile = new GitHubFile()
 
     it "returns the GitHub.com URL for an HTTP remote URL", ->
-      githubFile.gitUrl = ->
-        "https://github.com/foo/bar.git"
+      githubFile.gitUrl = -> "https://github.com/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
 
     it "returns the GitHub.com URL for an SSH remote URL", ->
-      githubFile.gitUrl = ->
-        "git@github.com:foo/bar.git"
+      githubFile.gitUrl = -> "git@github.com:foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
 
     it "returns a GitHub enterprise URL for a non-Github.com remote URL", ->
-      githubFile.gitUrl = ->
-        "https://git.enterprize.me/foo/bar.git"
+      githubFile.gitUrl = -> "https://git.enterprize.me/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
 
-      githubFile.gitUrl = ->
-        "git@git.enterprize.me:foo/bar.git"
+      githubFile.gitUrl = -> "git@git.enterprize.me:foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
 
     it "returns the GitHub.com URL for a git:// URL", ->
-      githubFile.gitUrl = ->
-        "git://github.com/foo/bar.git"
+      githubFile.gitUrl = -> "git://github.com/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+
+    it "returns undefined for Bitbucket URLs", ->
+      githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo.git"
+      expect(githubFile.githubRepoUrl()).toBeUndefined()
+
+      githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo"
+      expect(githubFile.githubRepoUrl()).toBeUndefined()
+
+      githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo.git"
+      expect(githubFile.githubRepoUrl()).toBeUndefined()
+
+      githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo"
+      expect(githubFile.githubRepoUrl()).toBeUndefined()
