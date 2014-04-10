@@ -100,7 +100,7 @@ class GitHubFile
   # Internal
   gitUrl: ->
     remoteOrBestGuess = @remoteName() ? 'origin'
-    @repo.getConfigValue("remote.#{remoteOrBestGuess}.url")
+    @repo.getConfigValue("remote.#{remoteOrBestGuess}.url", @filePath)
 
   # Internal
   githubRepoUrl: ->
@@ -124,24 +124,24 @@ class GitHubFile
 
   # Internal
   repoRelativePath: ->
-    @repo.relativize(@filePath)
+    @repo.getRepo(@filePath).relativize(@filePath)
 
   # Internal
   remoteName: ->
-    shortBranch = @repo.getShortHead()
+    shortBranch = @repo.getShortHead(@filePath)
     return null unless shortBranch
 
-    branchRemote = @repo.getConfigValue("branch.#{shortBranch}.remote")
+    branchRemote = @repo.getConfigValue("branch.#{shortBranch}.remote", @filePath)
     return null unless branchRemote?.length > 0
 
     branchRemote
 
   # Internal
   branchName: ->
-    shortBranch = @repo.getShortHead()
+    shortBranch = @repo.getShortHead(@filePath)
     return null unless shortBranch
 
-    branchMerge = @repo.getConfigValue("branch.#{shortBranch}.merge")
+    branchMerge = @repo.getConfigValue("branch.#{shortBranch}.merge", @filePath)
     return shortBranch unless branchMerge?.length > 11
     return shortBranch unless branchMerge.indexOf('refs/heads/') is 0
 
