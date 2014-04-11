@@ -35,8 +35,7 @@ class GitHubFile
 
   copyUrl: (lineRange) ->
     if @isOpenable()
-      url = @blobUrl()
-      atom.clipboard.write(url + @getLineRangeSuffix(lineRange))
+      atom.clipboard.write(@blobUrl() + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
@@ -60,7 +59,7 @@ class GitHubFile
 
   # Public
   isOpenable: ->
-    @validationErrors().length == 0
+    @validationErrors().length is 0
 
   # Public
   validationErrors: ->
@@ -83,19 +82,24 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@branchName()}/#{@repoRelativePath()}"
+    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   blameUrl: ->
-    "#{@githubRepoUrl()}/blame/#{@branchName()}/#{@repoRelativePath()}"
+    "#{@githubRepoUrl()}/blame/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   historyUrl: ->
-    "#{@githubRepoUrl()}/commits/#{@branchName()}/#{@repoRelativePath()}"
+    "#{@githubRepoUrl()}/commits/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   branchCompareUrl: ->
-    "#{@githubRepoUrl()}/compare/#{@branchName()}"
+    "#{@githubRepoUrl()}/compare/#{@encodeSegments(@branchName())}"
+
+  encodeSegments: (segments='') ->
+    segments = segments.split('/')
+    segments = segments.map (segment) -> encodeURIComponent(segment)
+    segments.join('/')
 
   # Internal
   gitUrl: ->

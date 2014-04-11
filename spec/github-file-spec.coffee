@@ -74,6 +74,15 @@ describe "GitHubFile", ->
             expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
               'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2'
 
+        describe "when the file has a '#' in its name", ->
+          it "opens the GitHub.com blob URL for the file", ->
+            editor = atom.project.openSync('a/b#/test#hash.md')
+            githubFile = GitHubFile.fromPath(editor.getPath())
+            spyOn(githubFile, 'openUrlInBrowser')
+            githubFile.open()
+            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+              'https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md'
+
       describe "when the branch has a '/' in its name", ->
         fixtureName = 'branch-with-slash-in-name'
 
@@ -89,6 +98,22 @@ describe "GitHubFile", ->
           githubFile.open()
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md'
+
+      describe "when the branch has a '#' in its name", ->
+        fixtureName = 'branch-with-hash-in-name'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blob URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blob/a%23b%23c/some-dir/some-file.md'
 
       describe "when the remote has a '/' in its name", ->
         fixtureName = 'remote-with-slash-in-name'
