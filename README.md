@@ -1,4 +1,4 @@
-# Open on GitHub
+# Open on GitHub [![Build Status](https://travis-ci.org/atom/open-on-github.svg?branch=master)](https://travis-ci.org/atom/open-on-github)
 
 Provides commands to quickly view the current file on GitHub.com (The Website).
 
