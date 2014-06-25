@@ -117,6 +117,8 @@ class GitHubFile
     else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
       url = "http#{url.substring(3).replace(/\.git$/, '')}"
 
+    url = url.replace(/\/+$/, '')
+
     return url unless @isBitbucketUrl(url)
 
   isBitbucketUrl: (url) ->

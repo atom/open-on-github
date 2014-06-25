@@ -297,3 +297,10 @@ describe "GitHubFile", ->
 
       githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo"
       expect(githubFile.githubRepoUrl()).toBeUndefined()
+
+    it "removes trailing slashes", ->
+      githubFile.gitUrl = -> "https://github.com/foo/bar/"
+      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+
+      githubFile.gitUrl = -> "https://github.com/foo/bar//////"
+      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
