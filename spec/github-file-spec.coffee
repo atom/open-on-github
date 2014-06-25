@@ -4,9 +4,9 @@ path = require 'path'
 os = require 'os'
 
 describe "GitHubFile", ->
+  [githubFile, editor] = []
+
   describe "commands", ->
-    githubFile = null
-    editor = null
     workingDirPath = path.join(os.tmpdir(), 'open-on-github-working-dir')
     filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
@@ -25,8 +25,12 @@ describe "GitHubFile", ->
 
     setupGithubFile = ->
       atom.project.setPath(workingDirPath)
-      editor = atom.project.openSync(filePathRelativeToWorkingDir)
-      githubFile = GitHubFile.fromPath(editor.getPath())
+      waitsForPromise ->
+         atom.workspace.open(filePathRelativeToWorkingDir)
+
+      runs ->
+        editor = atom.workspace.getActiveEditor()
+        githubFile = GitHubFile.fromPath(editor.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
       success = null
@@ -55,7 +59,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -76,19 +80,23 @@ describe "GitHubFile", ->
 
         describe "when the file has a '#' in its name", ->
           it "opens the GitHub.com blob URL for the file", ->
-            editor = atom.project.openSync('a/b#/test#hash.md')
-            githubFile = GitHubFile.fromPath(editor.getPath())
-            spyOn(githubFile, 'openUrlInBrowser')
-            githubFile.open()
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-              'https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md'
+            waitsForPromise ->
+              atom.workspace.open('a/b#/test#hash.md')
+
+            runs ->
+              editor = atom.workspace.getActiveEditor()
+              githubFile = GitHubFile.fromPath(editor.getPath())
+              spyOn(githubFile, 'openUrlInBrowser')
+              githubFile.open()
+              expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+                'https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md'
 
       describe "when the branch has a '/' in its name", ->
         fixtureName = 'branch-with-slash-in-name'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -104,7 +112,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -120,7 +128,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -136,7 +144,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -152,7 +160,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -186,7 +194,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -211,7 +219,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -228,7 +236,7 @@ describe "GitHubFile", ->
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          setupGithubFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -245,7 +253,7 @@ describe "GitHubFile", ->
       beforeEach ->
         setupWorkingDir(fixtureName)
         atom.config.set('open-on-github.includeLineNumbersInUrls', true)
-        githubFile = setupGithubFile()
+        setupGithubFile()
 
       afterEach ->
         teardownWorkingDirAndRestoreFixture(fixtureName)
@@ -261,8 +269,6 @@ describe "GitHubFile", ->
           expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L3'
 
   describe "githubRepoUrl", ->
-    githubFile = null
-
     beforeEach ->
       githubFile = new GitHubFile()
 
