@@ -113,6 +113,7 @@ class GitHubFile
       url = url.replace(/\.git$/, '')
     else if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
       url = url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
+        repoPath = repoPath.replace(/^\/+/, '') # replace leading slashes
         "http://#{host}/#{repoPath}".replace(/\.git$/, '')
     else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
       url = "http#{url.substring(3).replace(/\.git$/, '')}"
