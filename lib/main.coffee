@@ -7,7 +7,7 @@ module.exports =
   activate: ->
     return unless atom.project.getRepo()?
 
-    atom.workspaceView.eachPane (pane) ->
+    atom.workspaceView.eachPaneView (pane) ->
       pane.command 'open-on-github:file', ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).open(getSelectedRange())
@@ -29,7 +29,7 @@ module.exports =
           GitHubFile.fromPath(itemPath).openBranchCompare()
 
 getActivePath = ->
-  atom.workspaceView.getActivePaneItem()?.getPath?()
+  atom.workspace.getActivePaneItem()?.getPath?()
 
 getSelectedRange = ->
-  atom.workspaceView.getActivePaneItem()?.getSelectedBufferRange?()
+  atom.workspace.getActivePaneItem()?.getSelectedBufferRange?()
