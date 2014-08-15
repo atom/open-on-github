@@ -1,7 +1,7 @@
 {
   "name": "open-on-github",
   "version": "0.29.0",
-  "main": "./lib/open-on-github",
+  "main": "./lib/main",
   "description": "View the active file on github.com",
   "repository": "https://github.com/atom/open-on-github",
   "license": "MIT",
