@@ -313,3 +313,15 @@ describe "GitHubFile", ->
 
       githubFile.gitUrl = -> "git@github.com:/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+
+  it "activates when a command is triggered on the active editor", ->
+    activationPromise = atom.packages.activatePackage('open-on-github')
+
+    waitsForPromise ->
+       atom.workspace.open()
+
+    runs ->
+      atom.commands.dispatch(atom.views.getView(atom.workspace), 'open-on-github:file')
+
+    waitsForPromise ->
+      atom.packages.activatePackage('open-on-github')
