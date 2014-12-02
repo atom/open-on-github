@@ -24,7 +24,7 @@ describe "GitHubFile", ->
       fs.writeFileSync filePath, 'some file content'
 
     setupGithubFile = ->
-      atom.project.setPath(workingDirPath)
+      atom.project.setPaths([workingDirPath])
       waitsForPromise ->
          atom.workspace.open(filePathRelativeToWorkingDir)
 
