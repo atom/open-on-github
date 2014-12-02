@@ -1,8 +1,10 @@
 GitHubFile  = require './github-file'
 
 module.exports =
-  configDefaults:
-    includeLineNumbersInUrls: true
+  config:
+    includeLineNumbersInUrls:
+      default: true
+      type: 'boolean'
 
   activate: ->
     return unless atom.project.getRepo()?
