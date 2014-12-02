@@ -10,7 +10,7 @@ module.exports =
     return if atom.project.getRepositories().length is 0
 
     atom.workspace.observePanes (pane) ->
-      atom.commands.add atom.views.getView(pane),
+      atom.commands.add 'atom-pane',
         'open-on-github:file': ->
           if itemPath = getActivePath()
             GitHubFile.fromPath(itemPath).open(getSelectedRange())
