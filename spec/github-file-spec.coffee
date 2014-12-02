@@ -29,7 +29,7 @@ describe "GitHubFile", ->
          atom.workspace.open(filePathRelativeToWorkingDir)
 
       runs ->
-        editor = atom.workspace.getActiveEditor()
+        editor = atom.workspace.getActiveTextEditor()
         githubFile = GitHubFile.fromPath(editor.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
@@ -84,7 +84,7 @@ describe "GitHubFile", ->
               atom.workspace.open('a/b#/test#hash.md')
 
             runs ->
-              editor = atom.workspace.getActiveEditor()
+              editor = atom.workspace.getActiveTextEditor()
               githubFile = GitHubFile.fromPath(editor.getPath())
               spyOn(githubFile, 'openUrlInBrowser')
               githubFile.open()
