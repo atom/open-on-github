@@ -7,7 +7,7 @@ module.exports =
       type: 'boolean'
 
   activate: ->
-    return unless atom.project.getRepo()?
+    return if atom.project.getRepositories().length is 0
 
     atom.workspace.observePanes (pane) ->
       atom.commands.add atom.views.getView(pane),
