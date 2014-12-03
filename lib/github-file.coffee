@@ -11,7 +11,7 @@ class GitHubFile
 
   # Internal
   constructor: (@filePath) ->
-    @repo = atom.project.getRepo()
+    [@repo] = atom.project.getRepositories()
 
   # Public
   open: (lineRange) ->

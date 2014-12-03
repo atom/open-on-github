@@ -1,30 +1,32 @@
 GitHubFile  = require './github-file'
 
 module.exports =
-  configDefaults:
-    includeLineNumbersInUrls: true
+  config:
+    includeLineNumbersInUrls:
+      default: true
+      type: 'boolean'
 
   activate: ->
-    return unless atom.project.getRepo()?
+    return if atom.project.getRepositories().length is 0
 
-    atom.workspaceView.eachPaneView (pane) ->
-      pane.command 'open-on-github:file', ->
+    atom.commands.add 'atom-pane',
+      'open-on-github:file': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).open(getSelectedRange())
 
-      pane.command 'open-on-github:blame', ->
+      'open-on-github:blame': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).blame(getSelectedRange())
 
-      pane.command 'open-on-github:history', ->
+      'open-on-github:history': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).history()
 
-      pane.command 'open-on-github:copy-url', ->
+      'open-on-github:copy-url': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())
 
-      pane.command 'open-on-github:branch-compare', ->
+      'open-on-github:branch-compare': ->
         if itemPath = atom.project.getPath()
           GitHubFile.fromPath(itemPath).openBranchCompare()
 

@@ -24,12 +24,12 @@ describe "GitHubFile", ->
       fs.writeFileSync filePath, 'some file content'
 
     setupGithubFile = ->
-      atom.project.setPath(workingDirPath)
+      atom.project.setPaths([workingDirPath])
       waitsForPromise ->
          atom.workspace.open(filePathRelativeToWorkingDir)
 
       runs ->
-        editor = atom.workspace.getActiveEditor()
+        editor = atom.workspace.getActiveTextEditor()
         githubFile = GitHubFile.fromPath(editor.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
@@ -84,7 +84,7 @@ describe "GitHubFile", ->
               atom.workspace.open('a/b#/test#hash.md')
 
             runs ->
-              editor = atom.workspace.getActiveEditor()
+              editor = atom.workspace.getActiveTextEditor()
               githubFile = GitHubFile.fromPath(editor.getPath())
               spyOn(githubFile, 'openUrlInBrowser')
               githubFile.open()
@@ -313,3 +313,15 @@ describe "GitHubFile", ->
 
       githubFile.gitUrl = -> "git@github.com:/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+
+  it "activates when a command is triggered on the active editor", ->
+    activationPromise = atom.packages.activatePackage('open-on-github')
+
+    waitsForPromise ->
+       atom.workspace.open()
+
+    runs ->
+      atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-github:file')
+
+    waitsForPromise ->
+      activationPromise
