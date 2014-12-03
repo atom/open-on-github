@@ -321,7 +321,7 @@ describe "GitHubFile", ->
        atom.workspace.open()
 
     runs ->
-      atom.commands.dispatch(atom.views.getView(atom.workspace), 'open-on-github:file')
+      atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-github:file')
 
     waitsForPromise ->
       activationPromise
