@@ -1,4 +1,4 @@
-'.workspace':
+'atom-workspace':
   'alt-g o': 'open-on-github:file'
   'alt-g b': 'open-on-github:blame'
   'alt-g h': 'open-on-github:history'
