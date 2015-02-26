@@ -63,6 +63,9 @@ class GitHubFile
 
   # Public
   validationErrors: ->
+    unless @repo
+      return ["No repository found for directory #{atom.project.getPaths()[0]}"]
+
     unless @gitUrl()
       return ["No URL defined for remote (#{@remoteName()})"]
 

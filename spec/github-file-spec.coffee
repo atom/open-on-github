@@ -40,8 +40,7 @@ describe "GitHubFile", ->
       # Pathwatcher's close function is also not synchronous. Once
       # atom/node-pathwatcher#4 is implemented this should be alot cleaner.
       runs ->
-        atom.project.destroy()
-
+        atom.project.setPaths([])
         repeat = setInterval ->
           try
             fs.removeSync(workingDirPath)
@@ -171,6 +170,20 @@ describe "GitHubFile", ->
           githubFile.open()
           expect(console.warn).toHaveBeenCalledWith \
             'No URL defined for remote (null)'
+
+      describe "when the root directory doesn't have a git repo", ->
+        beforeEach ->
+          teardownWorkingDirAndRestoreFixture()
+          fs.mkdirSync(workingDirPath)
+          setupGithubFile()
+
+        it "does nothing", ->
+          spyOn(atom, 'beep')
+          spyOn(console, 'warn')
+          githubFile.open()
+          expect(atom.beep).toHaveBeenCalled()
+          expect(console.warn).toHaveBeenCalled()
+          expect(console.warn.mostRecentCall.args[0]).toContain("No repository found")
 
       describe "when the remote repo is not hosted on github.com", ->
         fixtureName = 'github-enterprise-remote'
