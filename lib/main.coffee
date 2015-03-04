@@ -7,8 +7,6 @@ module.exports =
       type: 'boolean'
 
   activate: ->
-    return if atom.project.getRepositories().length is 0
-
     atom.commands.add 'atom-pane',
       'open-on-github:file': ->
         if itemPath = getActivePath()
@@ -27,7 +25,7 @@ module.exports =
           GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())
 
       'open-on-github:branch-compare': ->
-        if itemPath = atom.project.getPath()
+        if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).openBranchCompare()
 
 getActivePath = ->
