@@ -318,6 +318,10 @@ describe "GitHubFile", ->
       githubFile.gitUrl = -> "git://github.com/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
 
+    it "returns the GitHub.com URL for a ssh:// URL", ->
+      githubFile.gitUrl = -> "ssh://git@github.com/foo/bar.git"
+      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+
     it "returns undefined for Bitbucket URLs", ->
       githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo.git"
       expect(githubFile.githubRepoUrl()).toBeUndefined()
