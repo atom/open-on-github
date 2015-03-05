@@ -11,7 +11,10 @@ class GitHubFile
 
   # Internal
   constructor: (@filePath) ->
-    [@repo] = atom.project.getRepositories()
+    [rootDir] = atom.project.relativizePath(filePath)
+    if rootDir?
+      rootDirIndex = atom.project.getPaths().indexOf(rootDir)
+      @repo = atom.project.getRepositories()[rootDirIndex]
 
   # Public
   open: (lineRange) ->
@@ -64,7 +67,7 @@ class GitHubFile
   # Public
   validationErrors: ->
     unless @repo
-      return ["No repository found for directory #{atom.project.getPaths()[0]}"]
+      return ["No repository found for path #{@filePath}."]
 
     unless @gitUrl()
       return ["No URL defined for remote (#{@remoteName()})"]
