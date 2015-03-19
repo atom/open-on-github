@@ -281,6 +281,23 @@ describe "GitHubFile", ->
           githubFile.copyUrl([[2, 1], [2, 1]])
           expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L3'
 
+    describe "openRepository", ->
+      describe "when the file is openable on GitHub.com", ->
+        fixtureName = 'github-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com repository URL", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.openRepository()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo'
+
   describe "githubRepoUrl", ->
     beforeEach ->
       githubFile = new GitHubFile()

@@ -48,6 +48,12 @@ class GitHubFile
     else
       @reportValidationErrors()
 
+  openRepository: ->
+    if @isOpenable()
+      @openUrlInBrowser(@githubRepoUrl())
+    else
+      @reportValidationErrors()
+
   getLineRangeSuffix: (lineRange) ->
     if lineRange and atom.config.get('open-on-github.includeLineNumbersInUrls')
       lineRange = Range.fromObject(lineRange)
