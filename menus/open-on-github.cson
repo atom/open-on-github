@@ -9,6 +9,7 @@
         { 'label': 'Copy URL', 'command': 'open-on-github:copy-url' }
         { 'label': 'File', 'command': 'open-on-github:file' }
         { 'label': 'History', 'command': 'open-on-github:history' }
+        { 'label': 'Repository', 'command': 'open-on-github:repository' }
       ]
     ]
   }

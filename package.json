@@ -11,7 +11,8 @@
       "open-on-github:branch-compare",
       "open-on-github:copy-url",
       "open-on-github:file",
-      "open-on-github:history"
+      "open-on-github:history",
+      "open-on-github:repository"
     ]
   },
   "engines": {

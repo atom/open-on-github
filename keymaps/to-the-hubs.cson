@@ -4,3 +4,4 @@
   'alt-g h': 'open-on-github:history'
   'alt-g c': 'open-on-github:copy-url'
   'alt-g r': 'open-on-github:branch-compare'
+  'alt-g g': 'open-on-github:repository'

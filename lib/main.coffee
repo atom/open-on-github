@@ -28,6 +28,10 @@ module.exports =
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).openBranchCompare()
 
+      'open-on-github:repository': ->
+        if itemPath = getActivePath()
+          GitHubFile.fromPath(itemPath).openRepository()
+
 getActivePath = ->
   atom.workspace.getActivePaneItem()?.getPath?()
 
