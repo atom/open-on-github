@@ -165,11 +165,10 @@ describe "GitHubFile", ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
         it "logs an error", ->
-          spyOn(atom, 'beep')
-          spyOn(console, 'warn')
+          spyOn(atom.notifications, 'addWarning')
           githubFile.open()
-          expect(console.warn).toHaveBeenCalledWith \
-            'No URL defined for remote (null)'
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith \
+            'No URL defined for remote: null'
 
       describe "when the root directory doesn't have a git repo", ->
         beforeEach ->
@@ -178,12 +177,10 @@ describe "GitHubFile", ->
           setupGithubFile()
 
         it "does nothing", ->
-          spyOn(atom, 'beep')
-          spyOn(console, 'warn')
+          spyOn(atom.notifications, 'addWarning')
           githubFile.open()
-          expect(atom.beep).toHaveBeenCalled()
-          expect(console.warn).toHaveBeenCalled()
-          expect(console.warn.mostRecentCall.args[0]).toContain("No repository found")
+          expect(atom.notifications.addWarning).toHaveBeenCalled()
+          expect(atom.notifications.addWarning.mostRecentCall.args[0]).toContain("No repository found")
 
       describe "when the remote repo is not hosted on github.com", ->
         fixtureName = 'github-enterprise-remote'

@@ -73,20 +73,20 @@ class GitHubFile
   # Public
   validationErrors: ->
     unless @repo
-      return ["No repository found for path #{@filePath}."]
+      return ["No repository found for path: #{@filePath}."]
 
     unless @gitUrl()
-      return ["No URL defined for remote (#{@remoteName()})"]
+      return ["No URL defined for remote: #{@remoteName()}"]
 
     unless @githubRepoUrl()
-      return ["Remote URL is not hosted on GitHub.com (#{@gitUrl()})"]
+      return ["Remote URL is not hosted on GitHub: #{@gitUrl()}"]
 
     []
 
   # Internal
   reportValidationErrors: ->
-    atom.beep()
-    console.warn error for error in @validationErrors()
+    message = @validationErrors().join('\n')
+    atom.notifications.addWarning(message)
 
   # Internal
   openUrlInBrowser: (url) ->
