@@ -12,6 +12,7 @@
       "open-on-github:copy-url",
       "open-on-github:file",
       "open-on-github:history",
+      "open-on-github:issues",
       "open-on-github:repository"
     ]
   },
