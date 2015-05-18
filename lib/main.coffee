@@ -20,6 +20,10 @@ module.exports =
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).history()
 
+      'open-on-github:issues': ->
+        if itemPath = getActivePath()
+          GitHubFile.fromPath(itemPath).openIssues()
+
       'open-on-github:copy-url': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())

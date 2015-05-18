@@ -48,6 +48,12 @@ class GitHubFile
     else
       @reportValidationErrors()
 
+  openIssues: ->
+    if @isOpenable()
+      @openUrlInBrowser(@issuesUrl())
+    else
+      @reportValidationErrors()
+
   openRepository: ->
     if @isOpenable()
       @openUrlInBrowser(@githubRepoUrl())
@@ -103,6 +109,10 @@ class GitHubFile
   # Internal
   historyUrl: ->
     "#{@githubRepoUrl()}/commits/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+
+  # Internal
+  issuesUrl: ->
+    "#{@githubRepoUrl()}/issues"
 
   # Internal
   branchCompareUrl: ->

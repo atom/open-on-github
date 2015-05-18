@@ -295,6 +295,23 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo'
 
+    describe "openIssues", ->
+      describe 'when the file is openable on GitHub.com', ->
+        fixtureName = 'github-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it 'opens the GitHub.com issues URL', ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.openIssues()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/issues'
+
   describe "githubRepoUrl", ->
     beforeEach ->
       githubFile = new GitHubFile()
