@@ -26,7 +26,7 @@ describe "GitHubFile", ->
     setupGithubFile = ->
       atom.project.setPaths([workingDirPath])
       waitsForPromise ->
-         atom.workspace.open(filePathRelativeToWorkingDir)
+        atom.workspace.open(filePathRelativeToWorkingDir)
 
       runs ->
         editor = atom.workspace.getActiveTextEditor()
@@ -366,7 +366,7 @@ describe "GitHubFile", ->
     activationPromise = atom.packages.activatePackage('open-on-github')
 
     waitsForPromise ->
-       atom.workspace.open()
+      atom.workspace.open()
 
     runs ->
       atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-github:file')
