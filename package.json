@@ -21,5 +21,8 @@
   },
   "dependencies": {
     "fs-plus": "2.x"
+  },
+  "devDependencies": {
+    "coffeelint": "^1.9.7"
   }
 }
