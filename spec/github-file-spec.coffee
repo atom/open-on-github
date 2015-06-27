@@ -257,6 +257,28 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md'
 
+    describe "copyPermalink", ->
+      fixtureName = 'github-remote'
+
+      beforeEach ->
+        setupWorkingDir(fixtureName)
+        atom.config.set('open-on-github.includeLineNumbersInUrls', true)
+        setupGithubFile()
+
+      afterEach ->
+        teardownWorkingDirAndRestoreFixture(fixtureName)
+
+      describe "when text is selected", ->
+        it "copies the URL to the clipboard with the selection range in the hash", ->
+          githubFile.copyPermalink([[0, 0], [1, 1]])
+          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L1-L2'
+
+      describe "when no text is selected", ->
+        it "copies the URL to the clipboard with the cursor location in the hash", ->
+          githubFile.copyPermalink([[2, 1], [2, 1]])
+          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L3'
+
+
     describe "copyUrl", ->
       fixtureName = 'github-remote'
 

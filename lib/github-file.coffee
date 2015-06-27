@@ -42,6 +42,12 @@ class GitHubFile
     else
       @reportValidationErrors()
 
+  copyPermalink: (lineRange) ->
+    if @isOpenable()
+      atom.clipboard.write(@permalinkBlobUrl() + @getLineRangeSuffix(lineRange))
+    else
+      @reportValidationErrors()
+
   openBranchCompare: ->
     if @isOpenable()
       @openUrlInBrowser(@branchCompareUrl())
@@ -101,6 +107,9 @@ class GitHubFile
   # Internal
   blobUrl: ->
     "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+
+  permalinkBlobUrl: ->
+    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@sha())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   blameUrl: ->
@@ -166,6 +175,10 @@ class GitHubFile
     return null unless branchRemote?.length > 0
 
     branchRemote
+
+  # Internal
+  sha: ->
+    @repo.getReferenceTarget("HEAD", @filePath)
 
   # Internal
   branchName: ->
