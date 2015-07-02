@@ -12,7 +12,6 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 - Open the issues view for the repository the file belongs to on github.com `alt-g, i`
 - Open the compare page for the current branch on github.com `alt-g, r`
 - Copy the github.com URL for the currently selected lines `alt-g, c`
-- Copy the github.com permalink for the currently selected lines `alt-g, p`
 
 ![Command Palette](https://f.cloud.github.com/assets/671378/2241755/23cb72f8-9ce2-11e3-9109-36c76a030f6a.png)
 

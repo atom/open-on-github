@@ -28,10 +28,6 @@ module.exports =
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())
 
-      'open-on-github:copy-permalink': ->
-        if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).copyPermalink(getSelectedRange())
-
       'open-on-github:branch-compare': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).openBranchCompare()

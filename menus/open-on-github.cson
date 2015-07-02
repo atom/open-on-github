@@ -7,7 +7,6 @@
         { 'label': 'Blame', 'command': 'open-on-github:blame' }
         { 'label': 'Branch Compare', 'command': 'open-on-github:branch-compare' }
         { 'label': 'Copy URL', 'command': 'open-on-github:copy-url' }
-        { 'label': 'Copy Permalink', 'command': 'open-on-github:copy-permalink' }
         { 'label': 'File', 'command': 'open-on-github:file' }
         { 'label': 'History', 'command': 'open-on-github:history' }
         { 'label': 'Issues', 'command': 'open-on-github:issues' }
