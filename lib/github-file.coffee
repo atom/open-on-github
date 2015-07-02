@@ -38,7 +38,7 @@ class GitHubFile
 
   copyUrl: (lineRange) ->
     if @isOpenable()
-      atom.clipboard.write(@blobUrl() + @getLineRangeSuffix(lineRange))
+      atom.clipboard.write(@shaUrl() + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
@@ -100,6 +100,10 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
+    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+
+  # Internal
+  shaUrl: ->
     "#{@githubRepoUrl()}/blob/#{@encodeSegments(@sha())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
