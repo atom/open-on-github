@@ -271,12 +271,12 @@ describe "GitHubFile", ->
       describe "when text is selected", ->
         it "copies the URL to the clipboard with the selection range in the hash", ->
           githubFile.copyUrl([[0, 0], [1, 1]])
-          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2'
+          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L1-L2'
 
       describe "when no text is selected", ->
         it "copies the URL to the clipboard with the cursor location in the hash", ->
           githubFile.copyUrl([[2, 1], [2, 1]])
-          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L3'
+          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L3'
 
     describe "openRepository", ->
       describe "when the file is openable on GitHub.com", ->
