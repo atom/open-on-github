@@ -38,7 +38,7 @@ class GitHubFile
 
   copyUrl: (lineRange) ->
     if @isOpenable()
-      atom.clipboard.write(@blobUrl() + @getLineRangeSuffix(lineRange))
+      atom.clipboard.write(@shaUrl() + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
@@ -101,6 +101,10 @@ class GitHubFile
   # Internal
   blobUrl: ->
     "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+
+  # Internal
+  shaUrl: ->
+    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@sha())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   blameUrl: ->
@@ -166,6 +170,10 @@ class GitHubFile
     return null unless branchRemote?.length > 0
 
     branchRemote
+
+  # Internal
+  sha: ->
+    @repo.getReferenceTarget("HEAD", @filePath)
 
   # Internal
   branchName: ->
