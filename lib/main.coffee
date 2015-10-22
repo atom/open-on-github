@@ -5,6 +5,7 @@ module.exports =
     includeLineNumbersInUrls:
       default: true
       type: 'boolean'
+      description: 'Include the line range selected in the editor when opening or copying URLs to the clipboard. When opened in the browser, the GitHub page will automatically scroll to the selected line range.'
 
   activate: ->
     atom.commands.add 'atom-pane',
