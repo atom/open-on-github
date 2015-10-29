@@ -8,6 +8,7 @@
         { 'label': 'Branch Compare', 'command': 'open-on-github:branch-compare' }
         { 'label': 'Copy URL', 'command': 'open-on-github:copy-url' }
         { 'label': 'File', 'command': 'open-on-github:file' }
+        { 'label': 'File on Master', 'command': 'open-on-github:file-on-master' }
         { 'label': 'History', 'command': 'open-on-github:history' }
         { 'label': 'Issues', 'command': 'open-on-github:issues' }
         { 'label': 'Repository', 'command': 'open-on-github:repository' }

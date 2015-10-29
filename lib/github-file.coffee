@@ -23,6 +23,12 @@ class GitHubFile
     else
       @reportValidationErrors()
 
+  openOnMaster: (lineRange) ->
+    if @isOpenable()
+      @openUrlInBrowser(@blobUrlForMaster() + @getLineRangeSuffix(lineRange))
+    else
+      @reportValidationErrors()
+
   # Public
   blame: (lineRange) ->
     if @isOpenable()
@@ -101,6 +107,9 @@ class GitHubFile
   # Internal
   blobUrl: ->
     "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+
+  blobUrlForMaster: ->
+    "#{@githubRepoUrl()}/blob/master/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   shaUrl: ->

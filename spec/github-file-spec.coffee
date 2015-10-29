@@ -198,6 +198,22 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md'
 
+    describe "openOnMaster", ->
+      fixtureName = 'non-tracked-branch'
+
+      beforeEach ->
+        setupWorkingDir(fixtureName)
+        setupGithubFile()
+
+      afterEach ->
+        teardownWorkingDirAndRestoreFixture(fixtureName)
+
+      it "opens the GitHub.com blob URL for the file", ->
+        spyOn(githubFile, 'openUrlInBrowser')
+        githubFile.openOnMaster()
+        expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
+
     describe "blame", ->
       describe "when the file is openable on GitHub.com", ->
         fixtureName = 'github-remote'

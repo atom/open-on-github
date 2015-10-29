@@ -13,6 +13,10 @@ module.exports =
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).open(getSelectedRange())
 
+      'open-on-github:file-on-master': ->
+        if itemPath = getActivePath()
+          GitHubFile.fromPath(itemPath).openOnMaster(getSelectedRange())
+
       'open-on-github:blame': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).blame(getSelectedRange())
