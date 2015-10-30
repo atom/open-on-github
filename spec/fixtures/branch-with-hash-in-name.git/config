@@ -8,6 +8,6 @@
 [remote "origin"]
 	url = https://github.com/some-user/some-repo.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
-[branch "foo/bar"]
+[branch "a#b#c"]
 	remote = origin
-	merge = refs/heads/foo/bar
+	merge = "refs/heads/a#b#c"
