@@ -135,17 +135,16 @@ class GitHubFile
   # Internal
   githubRepoUrl: ->
     url = @gitUrl()
-    if url.match /https?:\/\/[^\/]+\// # e.g., https://github.com/foo/bar.git
-      url = url.replace(/\.git$/, '')
-    else if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
+    if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
       url = url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
         repoPath = repoPath.replace(/^\/+/, '') # replace leading slashes
-        "http://#{host}/#{repoPath}".replace(/\.git$/, '')
+        "http://#{host}/#{repoPath}"
     else if url.match /ssh:\/\/git@([^\/]+)\//    # e.g., ssh://git@github.com/foo/bar.git
-      url = "http://#{url.substring(10).replace(/\.git$/, '')}"
+      url = "http://#{url.substring(10)}"
     else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
-      url = "http#{url.substring(3).replace(/\.git$/, '')}"
+      url = "http#{url.substring(3)}"
 
+    url = url.replace(/\.git$/, '')
     url = url.replace(/\/+$/, '')
 
     return url unless @isBitbucketUrl(url)

@@ -320,6 +320,13 @@ describe "GitHubFile", ->
       githubFile.gitUrl = -> "https://github.com/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
 
+    it "will only strip a single .git suffix", ->
+      githubFile.gitUrl = -> "https://github.com/foo/bar.git.git"
+      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar.git"
+
+      githubFile.gitUrl = -> "https://github.com/foo/bar.git.other.git"
+      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar.git.other"
+
     it "returns the GitHub.com URL for an HTTP remote URL", ->
       githubFile.gitUrl = -> "http://github.com/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
