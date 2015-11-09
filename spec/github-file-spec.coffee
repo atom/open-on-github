@@ -316,9 +316,20 @@ describe "GitHubFile", ->
     beforeEach ->
       githubFile = new GitHubFile()
 
-    it "returns the GitHub.com URL for an HTTP remote URL", ->
+    it "returns the GitHub.com URL for an HTTPS remote URL", ->
       githubFile.gitUrl = -> "https://github.com/foo/bar.git"
       expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+
+    it "will only strip a single .git suffix", ->
+      githubFile.gitUrl = -> "https://github.com/foo/bar.git.git"
+      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar.git"
+
+      githubFile.gitUrl = -> "https://github.com/foo/bar.git.other.git"
+      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar.git.other"
+
+    it "returns the GitHub.com URL for an HTTP remote URL", ->
+      githubFile.gitUrl = -> "http://github.com/foo/bar.git"
+      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
 
     it "returns the GitHub.com URL for an SSH remote URL", ->
       githubFile.gitUrl = -> "git@github.com:foo/bar.git"
