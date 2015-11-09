@@ -24,6 +24,13 @@ class GitHubFile
       @reportValidationErrors()
 
   # Public
+  openOnMaster: (lineRange) ->
+    if @isOpenable()
+      @openUrlInBrowser(@blobUrlForMaster() + @getLineRangeSuffix(lineRange))
+    else
+      @reportValidationErrors()
+
+  # Public
   blame: (lineRange) ->
     if @isOpenable()
       @openUrlInBrowser(@blameUrl() + @getLineRangeSuffix(lineRange))
@@ -100,7 +107,11 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@githubRepoUrl()}/blob/#{@remoteBranchName()}/#{@encodeSegments(@repoRelativePath())}"
+
+  # Internal
+  blobUrlForMaster: ->
+    "#{@githubRepoUrl()}/blob/master/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   shaUrl: ->
@@ -108,11 +119,11 @@ class GitHubFile
 
   # Internal
   blameUrl: ->
-    "#{@githubRepoUrl()}/blame/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@githubRepoUrl()}/blame/#{@remoteBranchName()}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   historyUrl: ->
-    "#{@githubRepoUrl()}/commits/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@githubRepoUrl()}/commits/#{@remoteBranchName()}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   issuesUrl: ->
@@ -184,3 +195,8 @@ class GitHubFile
     return shortBranch unless branchMerge.indexOf('refs/heads/') is 0
 
     branchMerge.substring(11)
+
+  # Internal
+  remoteBranchName: ->
+    return @encodeSegments(@branchName()) if @remoteName()?
+    "master"

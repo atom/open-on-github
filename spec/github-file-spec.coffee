@@ -147,12 +147,11 @@ describe "GitHubFile", ->
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
-
-        it "opens the GitHub.com blob URL for the file", ->
+        it "opens the GitHub.com blob URL for the file on the master branch", ->
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.open()
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/blob/non-tracked-branch/some-dir/some-file.md'
+            'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
       describe "when there is no remote", ->
         fixtureName = 'no-remote'
@@ -198,6 +197,22 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md'
 
+    describe "openOnMaster", ->
+      fixtureName = 'non-tracked-branch'
+
+      beforeEach ->
+        setupWorkingDir(fixtureName)
+        setupGithubFile()
+
+      afterEach ->
+        teardownWorkingDirAndRestoreFixture(fixtureName)
+
+      it "opens the GitHub.com blob URL for the file", ->
+        spyOn(githubFile, 'openUrlInBrowser')
+        githubFile.openOnMaster()
+        expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
+
     describe "blame", ->
       describe "when the file is openable on GitHub.com", ->
         fixtureName = 'github-remote'
@@ -222,6 +237,22 @@ describe "GitHubFile", ->
             githubFile.blame([[0, 0], [1, 1]])
             expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
               'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2'
+
+      describe "when the local branch is not tracked", ->
+        fixtureName = 'non-tracked-branch'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com blame URL for the file on the master branch", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.blame()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
 
     describe "branchCompare", ->
       describe "when the file is openable on GitHub.com", ->
@@ -252,6 +283,22 @@ describe "GitHubFile", ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
         it "opens the GitHub.com history URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.history()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md'
+
+      describe "when the local branch is not tracked", ->
+        fixtureName = 'non-tracked-branch'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com history URL for the file on the master branch", ->
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.history()
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
