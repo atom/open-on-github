@@ -183,7 +183,7 @@ class GitHubFile
 
   # Internal
   sha: ->
-    @repo.getReferenceTarget("HEAD", @filePath)
+    @repo.getReferenceTarget('HEAD', @filePath)
 
   # Internal
   branchName: ->
@@ -198,5 +198,7 @@ class GitHubFile
 
   # Internal
   remoteBranchName: ->
-    return @encodeSegments(@branchName()) if @remoteName()?
-    "master"
+    if @remoteName()?
+      @encodeSegments(@branchName())
+    else
+      'master'
