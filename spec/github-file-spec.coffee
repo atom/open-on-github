@@ -197,6 +197,22 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md'
 
+      describe "when the git config is set", ->
+        fixtureName = "git-config"
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          githubFile = setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens a URL that is specified by the git config", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.open()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/foo/bar/blob/some-branch/some-dir/some-file.md'
+
     describe "openOnMaster", ->
       fixtureName = 'non-tracked-branch'
 

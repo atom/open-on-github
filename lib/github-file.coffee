@@ -173,6 +173,9 @@ class GitHubFile
 
   # Internal
   remoteName: ->
+    gitConfigRemote = @repo.getConfigValue("atom.open-on-github.remote", @filePath)
+    return gitConfigRemote if gitConfigRemote
+
     shortBranch = @repo.getShortHead(@filePath)
     return null unless shortBranch
 
@@ -198,7 +201,11 @@ class GitHubFile
 
   # Internal
   remoteBranchName: ->
-    if @remoteName()?
+    gitConfigBranch = @repo.getConfigValue("atom.open-on-github.branch", @filePath)
+
+    if gitConfigBranch
+      gitConfigBranch
+    else if @remoteName()?
       @encodeSegments(@branchName())
     else
       'master'
