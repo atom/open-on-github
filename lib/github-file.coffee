@@ -86,13 +86,22 @@ class GitHubFile
   # Public
   validationErrors: ->
     unless @repo
-      return ["No repository found for path: #{@filePath}."]
+      if @filePath
+        return ["No repository found for  path: #{@filePath}"]
+      else
+        return ["No repository found for path"]
 
     unless @gitUrl()
-      return ["No URL defined for remote: #{@remoteName()}"]
+      if @remoteName()
+        return ["No URL defined for remote filepath: #{@remoteName()}"]
+      else
+        return ["No URL defined for remote filepath"]
 
     unless @githubRepoUrl()
-      return ["Remote URL is not hosted on GitHub: #{@gitUrl()}"]
+      if @gitUrl()
+        return ["Remote URL is not hosted on GitHub: #{@gitUrl()}"]
+      else
+        return ["Remote URL is not hosted on GitHub"]
 
     []
 
