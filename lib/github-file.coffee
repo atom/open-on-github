@@ -87,7 +87,7 @@ class GitHubFile
   validationErrors: ->
     unless @repo
       if @filePath
-        return ["No repository found for  path: #{@filePath}"]
+        return ["No repository found for path: #{@filePath}"]
       else
         return ["No repository found for path"]
 
