@@ -359,66 +359,66 @@ describe "GitHubFile", ->
           expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/issues'
 
-  describe "githubRepoUrl", ->
+  describe "gitHubRepoUrl", ->
     beforeEach ->
       githubFile = new GitHubFile()
 
     it "returns the GitHub.com URL for an HTTPS remote URL", ->
       githubFile.gitUrl = -> "https://github.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar"
 
     it "will only strip a single .git suffix", ->
       githubFile.gitUrl = -> "https://github.com/foo/bar.git.git"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar.git"
+      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar.git"
 
       githubFile.gitUrl = -> "https://github.com/foo/bar.git.other.git"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar.git.other"
+      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar.git.other"
 
     it "returns the GitHub.com URL for an HTTP remote URL", ->
       githubFile.gitUrl = -> "http://github.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
 
     it "returns the GitHub.com URL for an SSH remote URL", ->
       githubFile.gitUrl = -> "git@github.com:foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
 
     it "returns a GitHub enterprise URL for a non-Github.com remote URL", ->
       githubFile.gitUrl = -> "https://git.enterprize.me/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
 
       githubFile.gitUrl = -> "git@git.enterprize.me:foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
 
     it "returns the GitHub.com URL for a git:// URL", ->
       githubFile.gitUrl = -> "git://github.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
 
     it "returns the GitHub.com URL for a ssh:// URL", ->
       githubFile.gitUrl = -> "ssh://git@github.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
 
     it "returns undefined for Bitbucket URLs", ->
       githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo.git"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
 
       githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
 
       githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo.git"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
 
       githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
 
     it "removes leading and trailing slashes", ->
       githubFile.gitUrl = -> "https://github.com/foo/bar/"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar"
 
       githubFile.gitUrl = -> "https://github.com/foo/bar//////"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar"
 
       githubFile.gitUrl = -> "git@github.com:/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
 
   it "activates when a command is triggered on the active editor", ->
     activationPromise = atom.packages.activatePackage('open-on-github')
