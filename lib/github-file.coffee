@@ -19,21 +19,24 @@ class GitHubFile
   # Public
   open: (lineRange) ->
     if @isOpenable()
-      @openUrlInBrowser(@blobUrl() + @getLineRangeSuffix(lineRange))
+      @blobUrl().then (blobUrl) =>
+        @openUrlInBrowser(blobUrl + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
   # Public
   openOnMaster: (lineRange) ->
     if @isOpenable()
-      @openUrlInBrowser(@blobUrlForMaster() + @getLineRangeSuffix(lineRange))
+      @blobUrlForMaster().then (blobUrlForMaster) =>
+        @openUrlInBrowser(blobUrlForMaster + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
   # Public
   blame: (lineRange) ->
     if @isOpenable()
-      @openUrlInBrowser(@blameUrl() + @getLineRangeSuffix(lineRange))
+      @blameUrl().then (blameUrl) =>
+        @openUrlInBrowser(blameUrl + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
@@ -45,25 +48,29 @@ class GitHubFile
 
   copyUrl: (lineRange) ->
     if @isOpenable()
-      atom.clipboard.write(@shaUrl() + @getLineRangeSuffix(lineRange))
+      @shaUrl().then (shaUrl) =>
+        atom.clipboard.write(shaUrl + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
   openBranchCompare: ->
     if @isOpenable()
-      @openUrlInBrowser(@branchCompareUrl())
+      @branchCompareUrl().then (branchCompareUrl) =>
+        @openUrlInBrowser(branchCompareUrl)
     else
       @reportValidationErrors()
 
   openIssues: ->
     if @isOpenable()
-      @openUrlInBrowser(@issuesUrl())
+      @issuesUrl().then (issuesUrl) =>
+        @openUrlInBrowser(issuesUrl
     else
       @reportValidationErrors()
 
   openRepository: ->
     if @isOpenable()
-      @openUrlInBrowser(@githubRepoUrl())
+      @gitHubRepoUrl().then (gitHubRepoUrl) =>
+        @openUrlInBrowser(gitHubRepoUrl)
     else
       @reportValidationErrors()
 
@@ -91,7 +98,7 @@ class GitHubFile
     unless @gitUrl()
       return ["No URL defined for remote: #{@remoteName()}"]
 
-    unless @githubRepoUrl()
+    unless @gitHubRepoUrl()
       return ["Remote URL is not hosted on GitHub: #{@gitUrl()}"]
 
     []
@@ -107,31 +114,43 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@remoteBranchName()}/#{@encodeSegments(@repoRelativePath())}"
+    Promise.all([@gitHubRepoUrl(), @remoteBranchName(), @repoRelativePath()])
+      .then ([gitHubRepoUrl, remoteBranchName, repoRelativePath]) =>
+        "#{gitHubRepoUrl}/blob/#{remoteBranchName}/#{@encodeSegments(repoRelativePath)}"
 
   # Internal
   blobUrlForMaster: ->
-    "#{@githubRepoUrl()}/blob/master/#{@encodeSegments(@repoRelativePath())}"
+    Promise.all([@gitHubRepoUrl(), @repoRelativePath()])
+      .then ([gitHubRepoUrl, repoRelativePath]) =>
+        "#{gitHubRepoUrl}/blob/master/#{@encodeSegments(repoRelativePath)}"
 
   # Internal
   shaUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@sha())}/#{@encodeSegments(@repoRelativePath())}"
+    Promise.all([@gitHubRepoUrl(), @sha(), @repoRelativePath()])
+      .then ([gitHubRepoUrl, sha, repoRelativePath]) =>
+        "#{gitHubRepoUrl}/blob/#{@encodeSegments(sha)}/#{@encodeSegments(repoRelativePath)}"
 
   # Internal
   blameUrl: ->
-    "#{@githubRepoUrl()}/blame/#{@remoteBranchName()}/#{@encodeSegments(@repoRelativePath())}"
+    Promise.all([@gitHubRepoUrl(), @remoteBranchName(), @repoRelativePath()])
+      .then ([gitHubRepoUrl, remoteBranchName, repoRelativePath]) =>
+        "#{gitHubRepoUrl}/blame/#{remoteBranchName}/#{@encodeSegments(repoRelativePath)}"
 
   # Internal
   historyUrl: ->
-    "#{@githubRepoUrl()}/commits/#{@remoteBranchName()}/#{@encodeSegments(@repoRelativePath())}"
+    Promise.all([@gitHubRepoUrl(), @remoteBranchName(), @repoRelativePath()])
+      .then ([gitHubRepoUrl, remoteBranchName, repoRelativePath]) =>
+        "#{gitHubRepoUrl}/commits/#{remoteBranchName}/#{@encodeSegments(repoRelativePath)}"
 
   # Internal
   issuesUrl: ->
-    "#{@githubRepoUrl()}/issues"
+    @gitHubRepoUrl().then (gitHubRepoUrl) -> "#{gitHubRepoUrl}/issues"
 
   # Internal
   branchCompareUrl: ->
-    "#{@githubRepoUrl()}/compare/#{@encodeSegments(@branchName())}"
+    Promise.all([@gitHubRepoUrl(), @branchName()])
+      .then ([gitHubRepoUrl, branchName]) =>
+        "#{gitHubRepoUrl}/compare/#{@encodeSegments(branchName)}"
 
   encodeSegments: (segments='') ->
     segments = segments.split('/')
@@ -140,25 +159,25 @@ class GitHubFile
 
   # Internal
   gitUrl: ->
-    remoteOrBestGuess = @remoteName() ? 'origin'
-    @repo.getConfigValue("remote.#{remoteOrBestGuess}.url", @filePath)
+    @remoteName().then (remoteOrBestGuess = 'origin') =>
+      @repo.getConfigValue("remote.#{remoteOrBestGuess}.url", @filePath)
 
   # Internal
-  githubRepoUrl: ->
-    url = @gitUrl()
-    if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
-      url = url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
-        repoPath = repoPath.replace(/^\/+/, '') # replace leading slashes
-        "http://#{host}/#{repoPath}"
-    else if url.match /ssh:\/\/git@([^\/]+)\//    # e.g., ssh://git@github.com/foo/bar.git
-      url = "http://#{url.substring(10)}"
-    else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
-      url = "http#{url.substring(3)}"
+  gitHubRepoUrl: ->
+    @gitUrl().then (url) =>
+      if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
+        url = url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
+          repoPath = repoPath.replace(/^\/+/, '') # replace leading slashes
+          "http://#{host}/#{repoPath}"
+      else if url.match /ssh:\/\/git@([^\/]+)\//    # e.g., ssh://git@github.com/foo/bar.git
+        url = "http://#{url.substring(10)}"
+      else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
+        url = "http#{url.substring(3)}"
 
-    url = url.replace(/\.git$/, '')
-    url = url.replace(/\/+$/, '')
+      url = url.replace(/\.git$/, '')
+      url = url.replace(/\/+$/, '')
 
-    return url unless @isBitbucketUrl(url)
+      return url unless @isBitbucketUrl(url)
 
   isBitbucketUrl: (url) ->
     return true if url.indexOf('git@bitbucket.org') is 0
@@ -169,17 +188,18 @@ class GitHubFile
 
   # Internal
   repoRelativePath: ->
-    @repo.getRepo(@filePath).relativize(@filePath)
+    @repo.getRepo(@filePath).then (repo) =>
+      repo.relativize(@filePath)
 
   # Internal
   remoteName: ->
-    shortBranch = @repo.getShortHead(@filePath)
-    return null unless shortBranch
+    @repo.getShortHead(@filePath).then (shortBranch) =>
+      return null unless shortBranch
 
-    branchRemote = @repo.getConfigValue("branch.#{shortBranch}.remote", @filePath)
-    return null unless branchRemote?.length > 0
+      @repo.getConfigValue("branch.#{shortBranch}.remote", @filePath).then (branchRemote) ->
+        return null unless branchRemote?.length > 0
 
-    branchRemote
+        branchRemote
 
   # Internal
   sha: ->
@@ -187,18 +207,20 @@ class GitHubFile
 
   # Internal
   branchName: ->
-    shortBranch = @repo.getShortHead(@filePath)
-    return null unless shortBranch
+    @repo.getShortHead(@filePath).then (shortBranch) =>
+      return null unless shortBranch
 
-    branchMerge = @repo.getConfigValue("branch.#{shortBranch}.merge", @filePath)
-    return shortBranch unless branchMerge?.length > 11
-    return shortBranch unless branchMerge.indexOf('refs/heads/') is 0
+      @repo.getConfigValue("branch.#{shortBranch}.merge", @filePath).then (branchMerge) ->
+        return shortBranch unless branchMerge?.length > 11
+        return shortBranch unless branchMerge.indexOf('refs/heads/') is 0
 
-    branchMerge.substring(11)
+        branchMerge.substring(11)
 
   # Internal
   remoteBranchName: ->
-    if @remoteName()?
-      @encodeSegments(@branchName())
-    else
-      'master'
+    @remoteName().then (remoteName) =>
+      if remoteName?
+        @branchName().then (branchName) =>
+          @encodeSegments(branchName)
+      else
+        'master'
