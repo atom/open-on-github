@@ -14,7 +14,7 @@ class GitHubFile
     [rootDir] = atom.project.relativizePath(filePath)
     if rootDir?
       rootDirIndex = atom.project.getPaths().indexOf(rootDir)
-      @repo = atom.project.getRepositories()[rootDirIndex]
+      @repo = atom.project.getRepositories()[rootDirIndex]?.async
 
   # Public
   open: (lineRange) ->
