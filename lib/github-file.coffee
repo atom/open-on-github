@@ -18,61 +18,70 @@ class GitHubFile
 
   # Public
   open: (lineRange) ->
-    if @isOpenable()
-      @blobUrl().then (blobUrl) =>
-        @openUrlInBrowser(blobUrl + @getLineRangeSuffix(lineRange))
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @blobUrl().then (blobUrl) =>
+          @openUrlInBrowser(blobUrl + @getLineRangeSuffix(lineRange))
+      else
+        @reportValidationErrors()
 
   # Public
   openOnMaster: (lineRange) ->
-    if @isOpenable()
-      @blobUrlForMaster().then (blobUrlForMaster) =>
-        @openUrlInBrowser(blobUrlForMaster + @getLineRangeSuffix(lineRange))
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @blobUrlForMaster().then (blobUrlForMaster) =>
+          @openUrlInBrowser(blobUrlForMaster + @getLineRangeSuffix(lineRange))
+      else
+        @reportValidationErrors()
 
   # Public
   blame: (lineRange) ->
-    if @isOpenable()
-      @blameUrl().then (blameUrl) =>
-        @openUrlInBrowser(blameUrl + @getLineRangeSuffix(lineRange))
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @blameUrl().then (blameUrl) =>
+          @openUrlInBrowser(blameUrl + @getLineRangeSuffix(lineRange))
+      else
+        @reportValidationErrors()
 
   history: ->
-    if @isOpenable()
-      @openUrlInBrowser(@historyUrl())
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @historyUrl().then (historyUrl) =>
+          @openUrlInBrowser(historyUrl)
+      else
+        @reportValidationErrors()
 
   copyUrl: (lineRange) ->
-    if @isOpenable()
-      @shaUrl().then (shaUrl) =>
-        atom.clipboard.write(shaUrl + @getLineRangeSuffix(lineRange))
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @shaUrl().then (shaUrl) =>
+          atom.clipboard.write(shaUrl + @getLineRangeSuffix(lineRange))
+      else
+        @reportValidationErrors()
 
   openBranchCompare: ->
-    if @isOpenable()
-      @branchCompareUrl().then (branchCompareUrl) =>
-        @openUrlInBrowser(branchCompareUrl)
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @branchCompareUrl().then (branchCompareUrl) =>
+          @openUrlInBrowser(branchCompareUrl)
+      else
+        @reportValidationErrors()
 
   openIssues: ->
-    if @isOpenable()
-      @issuesUrl().then (issuesUrl) =>
-        @openUrlInBrowser(issuesUrl
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @issuesUrl().then (issuesUrl) =>
+          @openUrlInBrowser(issuesUrl)
+      else
+        @reportValidationErrors()
 
   openRepository: ->
-    if @isOpenable()
-      @gitHubRepoUrl().then (gitHubRepoUrl) =>
-        @openUrlInBrowser(gitHubRepoUrl)
-    else
-      @reportValidationErrors()
+    @isOpenable().then (isOpenable) =>
+      if isOpenable
+        @gitHubRepoUrl().then (gitHubRepoUrl) =>
+          @openUrlInBrowser(gitHubRepoUrl)
+      else
+        @reportValidationErrors()
 
   getLineRangeSuffix: (lineRange) ->
     if lineRange and atom.config.get('open-on-github.includeLineNumbersInUrls')
@@ -88,25 +97,30 @@ class GitHubFile
 
   # Public
   isOpenable: ->
-    @validationErrors().length is 0
+    @validationErrors().then (validationErrors) ->
+      validationErrors.length is 0
 
   # Public
   validationErrors: ->
     unless @repo
-      return ["No repository found for path: #{@filePath}."]
+      return Promise.resolve(["No repository found for path: #{@filePath}."])
 
-    unless @gitUrl()
-      return ["No URL defined for remote: #{@remoteName()}"]
+    @gitUrl().then (gitUrl) =>
+      unless gitUrl
+        return @remoteName().then (remoteName) ->
+          ["No URL defined for remote: #{remoteName}"]
 
-    unless @gitHubRepoUrl()
-      return ["Remote URL is not hosted on GitHub: #{@gitUrl()}"]
+      @gitHubRepoUrl().then (gitHubRepoUrl) =>
+        unless gitHubRepoUrl
+          return ["Remote URL is not hosted on GitHub: #{gitUrl}"]
 
-    []
+        []
 
   # Internal
   reportValidationErrors: ->
-    message = @validationErrors().join('\n')
-    atom.notifications.addWarning(message)
+    @validationErrors().then (validationErrors) ->
+      message = validationErrors.join('\n')
+      atom.notifications.addWarning(message)
 
   # Internal
   openUrlInBrowser: (url) ->
@@ -159,8 +173,9 @@ class GitHubFile
 
   # Internal
   gitUrl: ->
-    @remoteName().then (remoteOrBestGuess = 'origin') =>
-      @repo.getConfigValue("remote.#{remoteOrBestGuess}.url", @filePath)
+    @remoteName()
+      .then (remoteOrBestGuess = 'origin') =>
+        @repo.getConfigValue("remote.#{remoteOrBestGuess}.url", @filePath)
 
   # Internal
   gitHubRepoUrl: ->
