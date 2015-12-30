@@ -188,8 +188,7 @@ class GitHubFile
 
   # Internal
   repoRelativePath: ->
-    @repo.getRepo(@filePath).then (repo) =>
-      repo.relativize(@filePath)
+    @repo.relativizeToWorkingDirectory(@filePath)
 
   # Internal
   remoteName: ->
