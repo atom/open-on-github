@@ -65,16 +65,16 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com blob URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
         describe "when text is selected", ->
           it "opens the GitHub.com blob URL for the file with the selection range in the hash", ->
             atom.config.set('open-on-github.includeLineNumbersInUrls', true)
             spyOn(githubFile, 'openUrlInBrowser')
-            githubFile.open([[0, 0], [1, 1]])
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            waitsForPromise -> githubFile.open([[0, 0], [1, 1]])
+            runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
               'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2'
 
         describe "when the file has a '#' in its name", ->
@@ -86,8 +86,8 @@ describe "GitHubFile", ->
               editor = atom.workspace.getActiveTextEditor()
               githubFile = GitHubFile.fromPath(editor.getPath())
               spyOn(githubFile, 'openUrlInBrowser')
-              githubFile.open()
-              expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+              waitsForPromise -> githubFile.open()
+              runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
                 'https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md'
 
       describe "when the branch has a '/' in its name", ->
@@ -102,8 +102,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com blob URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md'
 
       describe "when the branch has a '#' in its name", ->
@@ -118,8 +118,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com blob URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/a%23b%23c/some-dir/some-file.md'
 
       describe "when the remote has a '/' in its name", ->
@@ -134,8 +134,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com blob URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/baz/some-dir/some-file.md'
 
       describe "when the local branch is not tracked", ->
@@ -149,8 +149,8 @@ describe "GitHubFile", ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
         it "opens the GitHub.com blob URL for the file on the master branch", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
       describe "when there is no remote", ->
@@ -165,8 +165,8 @@ describe "GitHubFile", ->
 
         it "logs an error", ->
           spyOn(atom.notifications, 'addWarning')
-          githubFile.open()
-          expect(atom.notifications.addWarning).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(atom.notifications.addWarning).toHaveBeenCalledWith \
             'No URL defined for remote: null'
 
       describe "when the root directory doesn't have a git repo", ->
@@ -177,9 +177,10 @@ describe "GitHubFile", ->
 
         it "does nothing", ->
           spyOn(atom.notifications, 'addWarning')
-          githubFile.open()
-          expect(atom.notifications.addWarning).toHaveBeenCalled()
-          expect(atom.notifications.addWarning.mostRecentCall.args[0]).toContain("No repository found")
+          waitsForPromise -> githubFile.open()
+          runs ->
+            expect(atom.notifications.addWarning).toHaveBeenCalled()
+            expect(atom.notifications.addWarning.mostRecentCall.args[0]).toContain("No repository found")
 
       describe "when the remote repo is not hosted on github.com", ->
         fixtureName = 'github-enterprise-remote'
@@ -193,8 +194,8 @@ describe "GitHubFile", ->
 
         it "opens a GitHub enterprise style blob URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md'
 
     describe "openOnMaster", ->
@@ -209,8 +210,8 @@ describe "GitHubFile", ->
 
       it "opens the GitHub.com blob URL for the file", ->
         spyOn(githubFile, 'openUrlInBrowser')
-        githubFile.openOnMaster()
-        expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+        waitsForPromise -> githubFile.openOnMaster()
+        runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
           'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
 
     describe "blame", ->
@@ -226,16 +227,16 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com blame URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.blame()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.blame()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
 
         describe "when text is selected", ->
           it "opens the GitHub.com blame URL for the file with the selection range in the hash", ->
             atom.config.set('open-on-github.includeLineNumbersInUrls', true)
             spyOn(githubFile, 'openUrlInBrowser')
-            githubFile.blame([[0, 0], [1, 1]])
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            waitsForPromise -> githubFile.blame([[0, 0], [1, 1]])
+            runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
               'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2'
 
       describe "when the local branch is not tracked", ->
@@ -250,8 +251,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com blame URL for the file on the master branch", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.blame()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.blame()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
 
     describe "branchCompare", ->
@@ -267,8 +268,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com branch compare URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.openBranchCompare()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.openBranchCompare()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/compare/master'
 
     describe "history", ->
@@ -284,8 +285,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com history URL for the file", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.history()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.history()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md'
 
       describe "when the local branch is not tracked", ->
@@ -300,8 +301,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com history URL for the file on the master branch", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.history()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.history()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md'
 
     describe "copyUrl", ->
@@ -317,13 +318,13 @@ describe "GitHubFile", ->
 
       describe "when text is selected", ->
         it "copies the URL to the clipboard with the selection range in the hash", ->
-          githubFile.copyUrl([[0, 0], [1, 1]])
-          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L1-L2'
+          waitsForPromise -> githubFile.copyUrl([[0, 0], [1, 1]])
+          runs -> expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L1-L2'
 
       describe "when no text is selected", ->
         it "copies the URL to the clipboard with the cursor location in the hash", ->
-          githubFile.copyUrl([[2, 1], [2, 1]])
-          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L3'
+          waitsForPromise -> githubFile.copyUrl([[2, 1], [2, 1]])
+          runs -> expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L3'
 
     describe "openRepository", ->
       describe "when the file is openable on GitHub.com", ->
@@ -338,8 +339,8 @@ describe "GitHubFile", ->
 
         it "opens the GitHub.com repository URL", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.openRepository()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.openRepository()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo'
 
     describe "openIssues", ->
@@ -355,70 +356,87 @@ describe "GitHubFile", ->
 
         it 'opens the GitHub.com issues URL', ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.openIssues()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.openIssues()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/issues'
 
   describe "gitHubRepoUrl", ->
+    waitsForGitHubUrl = null
     beforeEach ->
       githubFile = new GitHubFile()
 
+      waitsForGitHubUrl = (expectedUrl) ->
+        gitHubRepoUrl = null
+        waitsForPromise -> githubFile.gitHubRepoUrl().then (url) -> gitHubRepoUrl = url
+        runs ->
+          if expectedUrl?
+            expect(gitHubRepoUrl).toBe expectedUrl
+          else
+            expect(gitHubRepoUrl).toBeUndefined()
+
     it "returns the GitHub.com URL for an HTTPS remote URL", ->
-      githubFile.gitUrl = -> "https://github.com/foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar"
+      githubFile.gitUrl = -> Promise.resolve("https://github.com/foo/bar.git")
+      waitsForGitHubUrl("https://github.com/foo/bar")
 
     it "will only strip a single .git suffix", ->
-      githubFile.gitUrl = -> "https://github.com/foo/bar.git.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar.git"
+      githubFile.gitUrl = -> Promise.resolve("https://github.com/foo/bar.git.git")
+      waitsForGitHubUrl("https://github.com/foo/bar.git")
 
-      githubFile.gitUrl = -> "https://github.com/foo/bar.git.other.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar.git.other"
+      runs ->
+        githubFile.gitUrl = -> Promise.resolve("https://github.com/foo/bar.git.other.git")
+        waitsForGitHubUrl("https://github.com/foo/bar.git.other")
 
     it "returns the GitHub.com URL for an HTTP remote URL", ->
-      githubFile.gitUrl = -> "http://github.com/foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
+      githubFile.gitUrl = -> Promise.resolve("http://github.com/foo/bar.git")
+      waitsForGitHubUrl("http://github.com/foo/bar")
 
     it "returns the GitHub.com URL for an SSH remote URL", ->
-      githubFile.gitUrl = -> "git@github.com:foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
+      githubFile.gitUrl = -> Promise.resolve("git@github.com:foo/bar.git")
+      waitsForGitHubUrl("http://github.com/foo/bar")
 
     it "returns a GitHub enterprise URL for a non-Github.com remote URL", ->
-      githubFile.gitUrl = -> "https://git.enterprize.me/foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
+      githubFile.gitUrl = -> Promise.resolve("https://git.enterprize.me/foo/bar.git")
+      waitsForGitHubUrl("https://git.enterprize.me/foo/bar")
 
-      githubFile.gitUrl = -> "git@git.enterprize.me:foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
+      runs ->
+        githubFile.gitUrl = -> Promise.resolve("git@git.enterprize.me:foo/bar.git")
+        waitsForGitHubUrl("http://git.enterprize.me/foo/bar")
 
     it "returns the GitHub.com URL for a git:// URL", ->
-      githubFile.gitUrl = -> "git://github.com/foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
+      githubFile.gitUrl = -> Promise.resolve("git://github.com/foo/bar.git")
+      waitsForGitHubUrl("http://github.com/foo/bar")
 
     it "returns the GitHub.com URL for a ssh:// URL", ->
-      githubFile.gitUrl = -> "ssh://git@github.com/foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
+      githubFile.gitUrl = -> Promise.resolve("ssh://git@github.com/foo/bar.git")
+      waitsForGitHubUrl("http://github.com/foo/bar")
 
     it "returns undefined for Bitbucket URLs", ->
-      githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo.git"
-      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
+      githubFile.gitUrl = -> Promise.resolve("https://bitbucket.org/somebody/repo.git")
+      waitsForGitHubUrl()
 
-      githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo"
-      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
+      runs ->
+        githubFile.gitUrl = -> Promise.resolve("https://bitbucket.org/somebody/repo")
+        waitsForGitHubUrl()
 
-      githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo.git"
-      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
+      runs ->
+        githubFile.gitUrl = -> Promise.resolve("git@bitbucket.org:somebody/repo.git")
+        waitsForGitHubUrl()
 
-      githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo"
-      expect(githubFile.gitHubRepoUrl()).toBeUndefined()
+      runs ->
+        githubFile.gitUrl = -> Promise.resolve("git@bitbucket.org:somebody/repo")
+        waitsForGitHubUrl()
 
     it "removes leading and trailing slashes", ->
-      githubFile.gitUrl = -> "https://github.com/foo/bar/"
-      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar"
+      githubFile.gitUrl = -> Promise.resolve("https://github.com/foo/bar/")
+      waitsForGitHubUrl("https://github.com/foo/bar")
 
-      githubFile.gitUrl = -> "https://github.com/foo/bar//////"
-      expect(githubFile.gitHubRepoUrl()).toBe "https://github.com/foo/bar"
+      runs ->
+        githubFile.gitUrl = -> Promise.resolve("https://github.com/foo/bar//////")
+        waitsForGitHubUrl("https://github.com/foo/bar")
 
-      githubFile.gitUrl = -> "git@github.com:/foo/bar.git"
-      expect(githubFile.gitHubRepoUrl()).toBe "http://github.com/foo/bar"
+      runs ->
+        githubFile.gitUrl = -> Promise.resolve("git@github.com:/foo/bar.git")
+        waitsForGitHubUrl("http://github.com/foo/bar")
 
   it "activates when a command is triggered on the active editor", ->
     activationPromise = atom.packages.activatePackage('open-on-github')
