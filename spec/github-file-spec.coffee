@@ -210,8 +210,8 @@ describe "GitHubFile", ->
 
         it "opens a URL that is specified by the git config", ->
           spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/foo/bar/blob/some-branch/some-dir/some-file.md'
 
     describe "openOnMaster", ->
