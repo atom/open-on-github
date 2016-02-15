@@ -235,7 +235,7 @@ class GitHubFile
 
   # Internal
   remoteBranchName: ->
-    @repo.getConfigValue("atom.open-on-github.branch", @filePath).then(configBranch) =>
+    @repo.getConfigValue("atom.open-on-github.branch", @filePath).then (configBranch) =>
       return configBranch if configBranch?
 
       @remoteName().then (remoteName) =>
