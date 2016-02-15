@@ -110,7 +110,7 @@ class GitHubFile
         return @remoteName().then (remoteName) ->
           ["No URL defined for remote: #{remoteName}"]
 
-      @gitHubRepoUrl().then (gitHubRepoUrl) =>
+      @gitHubRepoUrl().then (gitHubRepoUrl) ->
         unless gitHubRepoUrl
           return ["Remote URL is not hosted on GitHub: #{gitUrl}"]
 
