@@ -15,6 +15,15 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 
 ![Command Palette](https://f.cloud.github.com/assets/671378/2241755/23cb72f8-9ce2-11e3-9109-36c76a030f6a.png)
 
+## Remote URL detection
+
+The GitHub repository URL is guessed from the current branch and Git remote information. To override the defaults, you can use `git config` to set the remote and branch name:
+
+```
+git config atom.open-on-github.remote upstream
+git config atom.open-on-github.branch some-branch
+```
+
 ---
 
 Inspired by the [GitHub Tools package][github-tools] for Sublime Text 2.

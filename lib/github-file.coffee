@@ -207,13 +207,16 @@ class GitHubFile
 
   # Internal
   remoteName: ->
-    @repo.getShortHead(@filePath).then (shortBranch) =>
-      return null unless shortBranch
+    @repo.getConfigValue("atom.open-on-github.remote", @filePath).then (configRemote) =>
+      return configRemote if configRemote?
 
-      @repo.getConfigValue("branch.#{shortBranch}.remote", @filePath).then (branchRemote) ->
-        return null unless branchRemote?.length > 0
+      @repo.getShortHead(@filePath).then (shortBranch) =>
+        return null unless shortBranch
 
-        branchRemote
+        @repo.getConfigValue("branch.#{shortBranch}.remote", @filePath).then (branchRemote) ->
+          return null unless branchRemote?.length > 0
+
+          branchRemote
 
   # Internal
   sha: ->
@@ -232,9 +235,12 @@ class GitHubFile
 
   # Internal
   remoteBranchName: ->
-    @remoteName().then (remoteName) =>
-      if remoteName?
-        @branchName().then (branchName) =>
-          @encodeSegments(branchName)
-      else
-        'master'
+    @repo.getConfigValue("atom.open-on-github.branch", @filePath).then(configBranch) =>
+      return configBranch if configBranch?
+
+      @remoteName().then (remoteName) =>
+        if remoteName?
+          @branchName().then (branchName) =>
+            @encodeSegments(branchName)
+        else
+          'master'
