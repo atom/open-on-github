@@ -90,6 +90,21 @@ describe "GitHubFile", ->
               runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
                 'https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md'
 
+      describe "when the file is part of a GitHub wiki", ->
+        fixtureName = 'github-remote-wiki'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com wiki URL for the file", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          waitsForPromise -> githubFile.open()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/wiki/some-file'
       describe "when the branch has a '/' in its name", ->
         fixtureName = 'branch-with-slash-in-name'
 

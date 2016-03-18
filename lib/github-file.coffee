@@ -131,7 +131,7 @@ class GitHubFile
   blobUrl: ->
     Promise.all([@gitHubRepoUrl(), @remoteBranchName(), @repoRelativePath()])
       .then ([gitHubRepoUrl, remoteBranchName, repoRelativePath]) =>
-        "#{gitHubRepoUrl}/blob/#{remoteBranchName}/#{@encodeSegments(repoRelativePath)}"
+        if @isGitHubWikiUrl(gitHubRepoUrl) then "#{gitHubRepoUrl.slice(0, -5)}/wiki/#{@extractFileName(repoRelativePath)}" else "#{gitHubRepoUrl}/blob/#{remoteBranchName}/#{@encodeSegments(repoRelativePath)}"
 
   # Internal
   blobUrlForMaster: ->
@@ -173,6 +173,11 @@ class GitHubFile
     segments.join('/')
 
   # Internal
+  extractFileName: (segments='') ->
+    [..., fileName] = segments.split '/'
+    return fileName.split('.')[0]
+
+  # Internal
   gitUrl: ->
     @remoteName()
       .then (remoteOrBestGuess = 'origin') =>
@@ -194,6 +199,9 @@ class GitHubFile
       url = url.replace(/\/+$/, '')
 
       return url unless @isBitbucketUrl(url)
+
+  isGitHubWikiUrl: (url) ->
+    return /\.wiki$/.test url
 
   isBitbucketUrl: (url) ->
     return true if url.indexOf('git@bitbucket.org') is 0
