@@ -2,6 +2,7 @@
 try {shell} = require 'electron' catch then shell = require 'shell'
 {Range} = require 'atom'
 parseUrl = require('url').parse
+path = require('path')
 
 module.exports =
 class GitHubFile
@@ -131,7 +132,10 @@ class GitHubFile
   blobUrl: ->
     Promise.all([@gitHubRepoUrl(), @remoteBranchName(), @repoRelativePath()])
       .then ([gitHubRepoUrl, remoteBranchName, repoRelativePath]) =>
-        if @isGitHubWikiUrl(gitHubRepoUrl) then "#{gitHubRepoUrl.slice(0, -5)}/wiki/#{@extractFileName(repoRelativePath)}" else "#{gitHubRepoUrl}/blob/#{remoteBranchName}/#{@encodeSegments(repoRelativePath)}"
+        if @isGitHubWikiUrl(gitHubRepoUrl)
+          "#{gitHubRepoUrl.slice(0, -5)}/wiki/#{@extractFileName(repoRelativePath)}"
+        else
+          "#{gitHubRepoUrl}/blob/#{remoteBranchName}/#{@encodeSegments(repoRelativePath)}"
 
   # Internal
   blobUrlForMaster: ->
@@ -173,9 +177,10 @@ class GitHubFile
     segments.join('/')
 
   # Internal
-  extractFileName: (segments='') ->
-    [..., fileName] = segments.split '/'
-    return fileName.split('.')[0]
+  extractFileName: (relativePath='') ->
+    path.parse(relativePath).name
+    # [..., fileName] = segments.split '/'
+    # return fileName.split('.')[0]
 
   # Internal
   gitUrl: ->

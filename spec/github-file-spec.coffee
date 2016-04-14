@@ -105,6 +105,7 @@ describe "GitHubFile", ->
           waitsForPromise -> githubFile.open()
           runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo/wiki/some-file'
+
       describe "when the branch has a '/' in its name", ->
         fixtureName = 'branch-with-slash-in-name'
 
