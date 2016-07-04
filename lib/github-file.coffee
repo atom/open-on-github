@@ -79,8 +79,8 @@ class GitHubFile
   openRepository: ->
     @isOpenable().then (isOpenable) =>
       if isOpenable
-        @gitHubRepoUrl().then (gitHubRepoUrl) =>
-          @openUrlInBrowser(gitHubRepoUrl)
+        @treeUrl().then (treeUrl) =>
+          @openUrlInBrowser(treeUrl)
       else
         @reportValidationErrors()
 
@@ -169,6 +169,14 @@ class GitHubFile
     Promise.all([@gitHubRepoUrl(), @branchName()])
       .then ([gitHubRepoUrl, branchName]) =>
         "#{gitHubRepoUrl}/compare/#{@encodeSegments(branchName)}"
+
+  treeUrl: ->
+    Promise.all([@gitHubRepoUrl(), @remoteBranchName()])
+      .then ([gitHubRepoUrl, remoteBranchName]) ->
+        if remoteBranchName isnt 'master'
+          "#{gitHubRepoUrl}/tree/#{remoteBranchName}"
+        else
+          gitHubRepoUrl
 
   encodeSegments: (segments='') ->
     segments = segments.split('/')

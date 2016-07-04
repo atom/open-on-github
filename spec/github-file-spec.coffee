@@ -375,6 +375,38 @@ describe "GitHubFile", ->
           runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://github.com/some-user/some-repo'
 
+      describe "when the branch is not master", ->
+        fixtureName = 'some-branch'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com tree URL for the branch", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          waitsForPromise -> githubFile.openRepository()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo/tree/some-branch'
+
+      describe "when the local branch is not tracked", ->
+        fixtureName = 'non-tracked-branch'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupGithubFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens the GitHub.com reposiotry URL", ->
+          spyOn(githubFile, 'openUrlInBrowser')
+          waitsForPromise -> githubFile.openRepository()
+          runs -> expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://github.com/some-user/some-repo'
+
     describe "openIssues", ->
       describe 'when the file is openable on GitHub.com', ->
         fixtureName = 'github-remote'
