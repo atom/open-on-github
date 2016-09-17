@@ -12,7 +12,7 @@ class GitHubFile
 
   # Internal
   constructor: (@filePath) ->
-    [rootDir] = atom.project.relativizePath(filePath)
+    [rootDir] = atom.project.relativizePath(@filePath)
     if rootDir?
       rootDirIndex = atom.project.getPaths().indexOf(rootDir)
       @repo = atom.project.getRepositories()[rootDirIndex]
