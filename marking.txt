@@ -1,0 +1,5 @@
+We changed the way that the validation errors returned so that if the filePath
+was null, it would not show "null" on the user interface. We also changed some of
+the wording of errors.
+Implementation: 'validationErrors: ->' function
+File: lib/github-file.coffee
