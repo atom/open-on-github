@@ -162,11 +162,11 @@ class GitHubFile
     if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
       url = url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
         repoPath = repoPath.replace(/^\/+/, '') # replace leading slashes
-        "http://#{host}/#{repoPath}"
+        "https://#{host}/#{repoPath}"
     else if url.match /ssh:\/\/git@([^\/]+)\//    # e.g., ssh://git@github.com/foo/bar.git
-      url = "http://#{url.substring(10)}"
+      url = "https://#{url.substring(10)}"
     else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
-      url = "http#{url.substring(3)}"
+      url = "https#{url.substring(3)}"
 
     url = url.replace(/\.git$/, '')
     url = url.replace(/\/+$/, '')
