@@ -25,6 +25,9 @@
     "fs-plus": "2.x",
     "standard": "^8.4.0"
   },
+  "scripts": {
+    "lint": "standard"
+  },
   "standard": {
     "ignore": [],
     "parser": "babel-eslint",
