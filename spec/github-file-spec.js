@@ -10,11 +10,11 @@ describe('GitHubFile', function () {
   let editor
 
   describe('commands', () => {
-    let workingDirPath = path.join(os.tmpdir(), 'open-on-github-working-dir')
-    let filePathRelativeToWorkingDir = 'some-dir/some-file.md'
+    const workingDirPath = path.join(os.tmpdir(), 'open-on-github-working-dir')
+    const filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
     function fixturePath (fixtureName) {
-      path.join(__dirname, 'fixtures', `${fixtureName}.git`)
+      return path.join(__dirname, 'fixtures', `${fixtureName}.git`)
     }
 
     function setupWorkingDir (fixtureName) {
@@ -25,7 +25,7 @@ describe('GitHubFile', function () {
       fs.makeTreeSync(subdirectoryPath)
 
       let filePath = path.join(subdirectoryPath, 'some-file.md')
-      return fs.writeFileSync(filePath, 'some file content')
+      fs.writeFileSync(filePath, 'some file content')
     }
 
     function setupGithubFile () {
