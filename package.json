@@ -13,6 +13,7 @@
       "open-on-github:file",
       "open-on-github:history",
       "open-on-github:issues",
+      "open-on-github:pull-requests",
       "open-on-github:repository"
     ]
   },
