@@ -20,7 +20,7 @@
     "atom": "*"
   },
   "devDependencies": {
-    "fs-plus": "^3.0.1",
+    "fs-plus": "2.x",
     "standard": "^10.0.3"
   },
   "scripts": {
