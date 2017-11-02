@@ -11,7 +11,6 @@ describe('GitHubFile', function () {
 
   describe('commands', () => {
     let workingDirPath
-    const filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
     function fixturePath (fixtureName) {
       return path.join(__dirname, 'fixtures', `${fixtureName}.git`)
@@ -28,9 +27,9 @@ describe('GitHubFile', function () {
       fs.writeFileSync(filePath, 'some file content')
     }
 
-    async function setupGithubFile () {
+    async function setupGithubFile (filePath = 'some-dir/some-file.md') {
       atom.project.setPaths([workingDirPath])
-      editor = await atom.workspace.open(filePathRelativeToWorkingDir)
+      editor = await atom.workspace.open(filePath)
       githubFile = GitHubFile.fromPath(editor.getPath())
       return githubFile
     }
@@ -52,7 +51,7 @@ describe('GitHubFile', function () {
 
         describe('when text is selected', () => {
           it('opens the GitHub.com blob URL for the file with the selection range in the hash', () => {
-            atom.config.set('open-on-github.includeLineNumbersInURLs', true)
+            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
             spyOn(githubFile, 'openURLInBrowser')
             githubFile.open([[0, 0], [1, 1]])
             expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2')
@@ -81,9 +80,22 @@ describe('GitHubFile', function () {
         it('opens the GitHub.com wiki URL for the file', () => {
           spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          runs(() => {
-            expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki/some-file')
-          })
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki/some-file')
+        })
+      })
+
+      describe('when the file is part of a GitHub gist', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile('some-file.md')
+        })
+
+        it('opens the gist.github.com URL for the file', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.open()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://gist.github.com/s0m3ha5h#file-some-file-md')
         })
       })
 
@@ -208,17 +220,34 @@ describe('GitHubFile', function () {
     })
 
     describe('openOnMaster', () => {
-      let fixtureName = 'non-tracked-branch'
+      describe('when the file is openable on GitHub.com', () => {
+        let fixtureName = 'non-tracked-branch'
 
-      beforeEach(async () => {
-        setupWorkingDir(fixtureName)
-        await setupGithubFile()
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('opens the GitHub.com blob URL for the file', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.openOnMaster()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
+        })
       })
 
-      it('opens the GitHub.com blob URL for the file', () => {
-        spyOn(githubFile, 'openURLInBrowser')
-        githubFile.openOnMaster()
-        expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
+      describe('when the file is part of a GitHub gist', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile('some-file.md')
+        })
+
+        it('opens the gist.github.com URL for the file and behaves exactly like open', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.openOnMaster()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://gist.github.com/s0m3ha5h#file-some-file-md')
+        })
       })
     })
 
@@ -239,7 +268,7 @@ describe('GitHubFile', function () {
 
         describe('when text is selected', () => {
           it('opens the GitHub.com blame URL for the file with the selection range in the hash', () => {
-            atom.config.set('open-on-github.includeLineNumbersInURLs', true)
+            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
             spyOn(githubFile, 'openURLInBrowser')
             githubFile.blame([[0, 0], [1, 1]])
             expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2')
@@ -310,28 +339,69 @@ describe('GitHubFile', function () {
           expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md')
         })
       })
+
+      describe('when the file is part of a GitHub gist', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile('some-file.md')
+        })
+
+        it('opens the gist.github.com history URL for the gist', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.history()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://gist.github.com/s0m3ha5h/revisions')
+        })
+      })
     })
 
     describe('copyURL', () => {
-      let fixtureName = 'github-remote'
+      describe('when the file is openable on GitHub.com', () => {
+        let fixtureName = 'github-remote'
 
-      beforeEach(async () => {
-        setupWorkingDir(fixtureName)
-        atom.config.set('open-on-github.includeLineNumbersInURLs', true)
-        await setupGithubFile()
-      })
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          atom.config.set('open-on-github.includeLineNumbersInUrls', true)
+          await setupGithubFile()
+        })
 
-      describe('when text is selected', () => {
-        it('copies the URL to the clipboard with the selection range in the hash', () => {
-          githubFile.copyURL([[0, 0], [1, 1]])
-          expect(atom.clipboard.read()).toBe('https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L1-L2')
+        describe('when text is selected', () => {
+          it('copies the URL to the clipboard with the selection range in the hash', () => {
+            githubFile.copyURL([[0, 0], [1, 1]])
+            expect(atom.clipboard.read()).toBe('https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L1-L2')
+          })
+        })
+
+        describe('when no text is selected', () => {
+          it('copies the URL to the clipboard with the cursor location in the hash', () => {
+            githubFile.copyURL([[2, 1], [2, 1]])
+            expect(atom.clipboard.read()).toBe('https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L3')
+          })
         })
       })
 
-      describe('when no text is selected', () => {
-        it('copies the URL to the clipboard with the cursor location in the hash', () => {
-          githubFile.copyURL([[2, 1], [2, 1]])
-          return expect(atom.clipboard.read()).toBe('https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L3')
+      describe('when the file is part of a GitHub gist', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          atom.config.set('open-on-github.includeLineNumbersInUrls', true)
+          await setupGithubFile('some-file.md')
+        })
+
+        describe('when text is selected', () => {
+          it('copies the gist.github.com URL with the selection range with the selection range appended', () => {
+            githubFile.copyURL([[0, 0], [1, 1]])
+            expect(atom.clipboard.read()).toBe('https://gist.github.com/s0m3ha5h/80b7897ceb6bd7531708509b50afeab36a4b73fd#file-some-file-md-L1-L2')
+          })
+        })
+
+        describe('when no text is selected', () => {
+          it('copies the gist.github.com URL with the selection range with the cursor location appended', () => {
+            githubFile.copyURL([[2, 1], [2, 1]])
+            expect(atom.clipboard.read()).toBe('https://gist.github.com/s0m3ha5h/80b7897ceb6bd7531708509b50afeab36a4b73fd#file-some-file-md-L3')
+          })
         })
       })
     })
@@ -349,6 +419,21 @@ describe('GitHubFile', function () {
           spyOn(githubFile, 'openURLInBrowser')
           githubFile.openRepository()
           expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo')
+        })
+      })
+
+      describe('when the file is part of a GitHub gist', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile('some-file.md')
+        })
+
+        it('opens the gist.github.com repository URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.openRepository()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://gist.github.com/s0m3ha5h')
         })
       })
     })
