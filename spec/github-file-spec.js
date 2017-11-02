@@ -45,17 +45,17 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
         })
 
         describe('when text is selected', () => {
           it('opens the GitHub.com blob URL for the file with the selection range in the hash', () => {
-            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
-            spyOn(githubFile, 'openUrlInBrowser')
+            atom.config.set('open-on-github.includeLineNumbersInURLs', true)
+            spyOn(githubFile, 'openURLInBrowser')
             githubFile.open([[0, 0], [1, 1]])
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2')
+            expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2')
           })
         })
 
@@ -63,9 +63,9 @@ describe('GitHubFile', function () {
           it('opens the GitHub.com blob URL for the file', async () => {
             editor = await atom.workspace.open('a/b#/test#hash.md')
             githubFile = GitHubFile.fromPath(editor.getPath())
-            spyOn(githubFile, 'openUrlInBrowser')
+            spyOn(githubFile, 'openURLInBrowser')
             githubFile.open()
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md')
+            expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md')
           })
         })
       })
@@ -79,10 +79,10 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com wiki URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
           runs(() => {
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki/some-file')
+            expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki/some-file')
           })
         })
       })
@@ -96,9 +96,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md')
         })
       })
 
@@ -111,9 +111,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/a%23b%23c/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/a%23b%23c/some-dir/some-file.md')
         })
       })
 
@@ -126,9 +126,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/baz/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/baz/some-dir/some-file.md')
         })
       })
 
@@ -141,9 +141,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com blob URL for the file on the master branch', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
         })
       })
 
@@ -185,9 +185,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens a GitHub enterprise style blob URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md')
         })
       })
 
@@ -200,9 +200,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens a URL that is specified by the git config', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/foo/bar/blob/some-branch/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/foo/bar/blob/some-branch/some-dir/some-file.md')
         })
       })
     })
@@ -216,9 +216,9 @@ describe('GitHubFile', function () {
       })
 
       it('opens the GitHub.com blob URL for the file', () => {
-        spyOn(githubFile, 'openUrlInBrowser')
+        spyOn(githubFile, 'openURLInBrowser')
         githubFile.openOnMaster()
-        expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
+        expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md')
       })
     })
 
@@ -232,17 +232,17 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com blame URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.blame()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md')
         })
 
         describe('when text is selected', () => {
           it('opens the GitHub.com blame URL for the file with the selection range in the hash', () => {
-            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
-            spyOn(githubFile, 'openUrlInBrowser')
+            atom.config.set('open-on-github.includeLineNumbersInURLs', true)
+            spyOn(githubFile, 'openURLInBrowser')
             githubFile.blame([[0, 0], [1, 1]])
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2')
+            expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2')
           })
         })
       })
@@ -256,9 +256,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com blame URL for the file on the master branch', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.blame()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md')
         })
       })
     })
@@ -273,9 +273,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com branch compare URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.openBranchCompare()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/compare/master')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/compare/master')
         })
       })
     })
@@ -290,9 +290,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com history URL for the file', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.history()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md')
         })
       })
 
@@ -305,32 +305,32 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com history URL for the file on the master branch', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.history()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md')
         })
       })
     })
 
-    describe('copyUrl', () => {
+    describe('copyURL', () => {
       let fixtureName = 'github-remote'
 
       beforeEach(async () => {
         setupWorkingDir(fixtureName)
-        atom.config.set('open-on-github.includeLineNumbersInUrls', true)
+        atom.config.set('open-on-github.includeLineNumbersInURLs', true)
         await setupGithubFile()
       })
 
       describe('when text is selected', () => {
         it('copies the URL to the clipboard with the selection range in the hash', () => {
-          githubFile.copyUrl([[0, 0], [1, 1]])
+          githubFile.copyURL([[0, 0], [1, 1]])
           expect(atom.clipboard.read()).toBe('https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L1-L2')
         })
       })
 
       describe('when no text is selected', () => {
         it('copies the URL to the clipboard with the cursor location in the hash', () => {
-          githubFile.copyUrl([[2, 1], [2, 1]])
+          githubFile.copyURL([[2, 1], [2, 1]])
           return expect(atom.clipboard.read()).toBe('https://github.com/some-user/some-repo/blob/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#L3')
         })
       })
@@ -346,9 +346,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com repository URL', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.openRepository()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo')
         })
       })
     })
@@ -363,9 +363,9 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com issues URL', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.openIssues()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/issues')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/issues')
         })
       })
     })
@@ -380,83 +380,83 @@ describe('GitHubFile', function () {
         })
 
         it('opens the GitHub.com pull requests URL', () => {
-          spyOn(githubFile, 'openUrlInBrowser')
+          spyOn(githubFile, 'openURLInBrowser')
           githubFile.openPullRequests()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/pulls')
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/pulls')
         })
       })
     })
   })
 
-  describe('githubRepoUrl', () => {
+  describe('githubRepoURL', () => {
     beforeEach(() => {
       githubFile = new GitHubFile()
     })
 
     it('returns the GitHub.com URL for an HTTPS remote URL', () => {
-      githubFile.gitUrl = () => 'https://github.com/foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('https://github.com/foo/bar')
+      githubFile.gitURL = () => 'https://github.com/foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
     })
 
     it('will only strip a single .git suffix', () => {
-      githubFile.gitUrl = () => 'https://github.com/foo/bar.git.git'
-      expect(githubFile.githubRepoUrl()).toBe('https://github.com/foo/bar.git')
+      githubFile.gitURL = () => 'https://github.com/foo/bar.git.git'
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar.git')
 
-      githubFile.gitUrl = () => 'https://github.com/foo/bar.git.other.git'
-      expect(githubFile.githubRepoUrl()).toBe('https://github.com/foo/bar.git.other')
+      githubFile.gitURL = () => 'https://github.com/foo/bar.git.other.git'
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar.git.other')
     })
 
     it('returns the GitHub.com URL for an HTTP remote URL', () => {
-      githubFile.gitUrl = () => 'http://github.com/foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('http://github.com/foo/bar')
+      githubFile.gitURL = () => 'http://github.com/foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
     })
 
     it('returns the GitHub.com URL for an SSH remote URL', () => {
-      githubFile.gitUrl = () => 'git@github.com:foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('http://github.com/foo/bar')
+      githubFile.gitURL = () => 'git@github.com:foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
     })
 
     it('returns a GitHub enterprise URL for a non-Github.com remote URL', () => {
-      githubFile.gitUrl = () => 'https://git.enterprize.me/foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('https://git.enterprize.me/foo/bar')
+      githubFile.gitURL = () => 'https://git.enterprize.me/foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('https://git.enterprize.me/foo/bar')
 
-      githubFile.gitUrl = () => 'git@git.enterprize.me:foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('http://git.enterprize.me/foo/bar')
+      githubFile.gitURL = () => 'git@git.enterprize.me:foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('http://git.enterprize.me/foo/bar')
     })
 
     it('returns the GitHub.com URL for a git:// URL', () => {
-      githubFile.gitUrl = () => 'git://github.com/foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('http://github.com/foo/bar')
+      githubFile.gitURL = () => 'git://github.com/foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
     })
 
     it('returns the GitHub.com URL for a ssh:// URL', () => {
-      githubFile.gitUrl = () => 'ssh://git@github.com/foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('http://github.com/foo/bar')
+      githubFile.gitURL = () => 'ssh://git@github.com/foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
     })
 
     it('returns undefined for Bitbucket URLs', () => {
-      githubFile.gitUrl = () => 'https://bitbucket.org/somebody/repo.git'
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      githubFile.gitURL = () => 'https://bitbucket.org/somebody/repo.git'
+      expect(githubFile.githubRepoURL()).toBeUndefined()
 
-      githubFile.gitUrl = () => 'https://bitbucket.org/somebody/repo'
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      githubFile.gitURL = () => 'https://bitbucket.org/somebody/repo'
+      expect(githubFile.githubRepoURL()).toBeUndefined()
 
-      githubFile.gitUrl = () => 'git@bitbucket.org:somebody/repo.git'
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      githubFile.gitURL = () => 'git@bitbucket.org:somebody/repo.git'
+      expect(githubFile.githubRepoURL()).toBeUndefined()
 
-      githubFile.gitUrl = () => 'git@bitbucket.org:somebody/repo'
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      githubFile.gitURL = () => 'git@bitbucket.org:somebody/repo'
+      expect(githubFile.githubRepoURL()).toBeUndefined()
     })
 
     it('removes leading and trailing slashes', () => {
-      githubFile.gitUrl = () => 'https://github.com/foo/bar/'
-      expect(githubFile.githubRepoUrl()).toBe('https://github.com/foo/bar')
+      githubFile.gitURL = () => 'https://github.com/foo/bar/'
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
 
-      githubFile.gitUrl = () => 'https://github.com/foo/bar//////'
-      expect(githubFile.githubRepoUrl()).toBe('https://github.com/foo/bar')
+      githubFile.gitURL = () => 'https://github.com/foo/bar//////'
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
 
-      githubFile.gitUrl = () => 'git@github.com:/foo/bar.git'
-      expect(githubFile.githubRepoUrl()).toBe('http://github.com/foo/bar')
+      githubFile.gitURL = () => 'git@github.com:/foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
     })
   })
 
