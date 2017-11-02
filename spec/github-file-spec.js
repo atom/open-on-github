@@ -374,12 +374,10 @@ describe('GitHubFile', function () {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens the GitHub.com pull requests URL', () => {
           spyOn(githubFile, 'openUrlInBrowser')
