@@ -20,7 +20,7 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 
 The GitHub repository URL is guessed from the current branch and Git remote information. To override the defaults, you can use `git config` to set the remote and branch name:
 
-```
+``` command-line
 git config atom.open-on-github.remote upstream
 git config atom.open-on-github.branch some-branch
 ```
