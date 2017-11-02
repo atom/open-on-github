@@ -235,6 +235,21 @@ describe('GitHubFile', function () {
         })
       })
 
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('opens the GitHub.com wiki URL for the file and behaves exactly like open', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.openOnMaster()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki/some-file')
+        })
+      })
+
       describe('when the file is part of a GitHub gist', () => {
         let fixtureName = 'github-remote-gist'
 
@@ -340,6 +355,21 @@ describe('GitHubFile', function () {
         })
       })
 
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('opens the GitHub.com wiki history URL for the file', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.history()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki/some-file/_history')
+        })
+      })
+
       describe('when the file is part of a GitHub gist', () => {
         let fixtureName = 'github-remote-gist'
 
@@ -381,6 +411,21 @@ describe('GitHubFile', function () {
         })
       })
 
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          atom.config.set('open-on-github.includeLineNumbersInUrls', true)
+          await setupGithubFile()
+        })
+
+        it('copies the GitHub.com wiki URL to the clipboard and ignores any selection ranges', () => {
+          githubFile.copyURL([[0, 0], [1, 1]])
+          expect(atom.clipboard.read()).toBe('https://github.com/some-user/some-repo/wiki/some-file/80b7897ceb6bd7531708509b50afeab36a4b73fd')
+        })
+      })
+
       describe('when the file is part of a GitHub gist', () => {
         let fixtureName = 'github-remote-gist'
 
@@ -419,6 +464,21 @@ describe('GitHubFile', function () {
           spyOn(githubFile, 'openURLInBrowser')
           githubFile.openRepository()
           expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo')
+        })
+      })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('opens the GitHub.com wiki history URL for the file', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.openRepository()
+          expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki')
         })
       })
 
