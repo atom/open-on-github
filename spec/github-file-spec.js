@@ -51,7 +51,7 @@ describe('GitHubFile', function () {
 
         describe('when text is selected', () => {
           it('opens the GitHub.com blob URL for the file with the selection range in the hash', () => {
-            atom.config.set('open-on-github.includeLineNumbersInURLs', true)
+            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
             spyOn(githubFile, 'openURLInBrowser')
             githubFile.open([[0, 0], [1, 1]])
             expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2')
@@ -255,7 +255,7 @@ describe('GitHubFile', function () {
 
         describe('when text is selected', () => {
           it('opens the GitHub.com blame URL for the file with the selection range in the hash', () => {
-            atom.config.set('open-on-github.includeLineNumbersInURLs', true)
+            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
             spyOn(githubFile, 'openURLInBrowser')
             githubFile.blame([[0, 0], [1, 1]])
             expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2')
@@ -333,7 +333,7 @@ describe('GitHubFile', function () {
 
       beforeEach(async () => {
         setupWorkingDir(fixtureName)
-        atom.config.set('open-on-github.includeLineNumbersInURLs', true)
+        atom.config.set('open-on-github.includeLineNumbersInUrls', true)
         await setupGithubFile()
       })
 
