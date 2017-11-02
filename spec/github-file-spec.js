@@ -694,7 +694,7 @@ describe('GitHubFile', function () {
 
     it('returns the GitHub.com URL for an SSH remote URL', () => {
       githubFile.gitURL = () => 'git@github.com:foo/bar.git'
-      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
     })
 
     it('returns a GitHub enterprise URL for a non-Github.com remote URL', () => {
@@ -702,17 +702,22 @@ describe('GitHubFile', function () {
       expect(githubFile.githubRepoURL()).toBe('https://git.enterprize.me/foo/bar')
 
       githubFile.gitURL = () => 'git@git.enterprize.me:foo/bar.git'
-      expect(githubFile.githubRepoURL()).toBe('http://git.enterprize.me/foo/bar')
+      expect(githubFile.githubRepoURL()).toBe('https://git.enterprize.me/foo/bar')
     })
 
     it('returns the GitHub.com URL for a git:// URL', () => {
       githubFile.gitURL = () => 'git://github.com/foo/bar.git'
-      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
+    })
+
+    it('returns the GitHub.com URL for a user@github.com URL', () => {
+      githubFile.gitURL = () => 'https://user@github.com/foo/bar.git'
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
     })
 
     it('returns the GitHub.com URL for a ssh:// URL', () => {
       githubFile.gitURL = () => 'ssh://git@github.com/foo/bar.git'
-      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
     })
 
     it('returns undefined for Bitbucket URLs', () => {
@@ -737,7 +742,7 @@ describe('GitHubFile', function () {
       expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
 
       githubFile.gitURL = () => 'git@github.com:/foo/bar.git'
-      expect(githubFile.githubRepoURL()).toBe('http://github.com/foo/bar')
+      expect(githubFile.githubRepoURL()).toBe('https://github.com/foo/bar')
     })
   })
 
