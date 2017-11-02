@@ -20,33 +20,22 @@
     "atom": "*"
   },
   "devDependencies": {
-    "babel-eslint": "^7.0.0",
-    "fs-plus": "2.x",
-    "standard": "^8.4.0"
+    "fs-plus": "^3.0.1",
+    "standard": "^10.0.3",
+    "temp": "^0.8.3"
   },
   "scripts": {
     "lint": "standard"
   },
   "standard": {
-    "ignore": [],
-    "parser": "babel-eslint",
+    "env": [
+      "browser",
+      "node",
+      "atomtest",
+      "jasmine"
+    ],
     "globals": [
-      "atom",
-      "afterEach",
-      "beforeEach",
-      "describe",
-      "fdescribe",
-      "xdescribe",
-      "expect",
-      "it",
-      "fit",
-      "xit",
-      "jasmine",
-      "runs",
-      "spyOn",
-      "waits",
-      "waitsFor",
-      "waitsForPromise"
+      "atom"
     ]
   },
   "configSchema": {

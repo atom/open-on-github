@@ -1,16 +1,14 @@
-/** @babel */
-
-import fs from 'fs-plus'
-import path from 'path'
-import os from 'os'
-import GitHubFile from '../lib/github-file'
+const fs = require('fs-plus')
+const path = require('path')
+const temp = require('temp').track()
+const GitHubFile = require('../lib/github-file')
 
 describe('GitHubFile', function () {
   let githubFile
   let editor
 
   describe('commands', () => {
-    const workingDirPath = path.join(os.tmpdir(), 'open-on-github-working-dir')
+    let workingDirPath
     const filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
     function fixturePath (fixtureName) {
@@ -18,7 +16,7 @@ describe('GitHubFile', function () {
     }
 
     function setupWorkingDir (fixtureName) {
-      fs.makeTreeSync(workingDirPath)
+      workingDirPath = temp.mkdirSync('open-on-github-working-dir-')
       fs.copySync(fixturePath(fixtureName), path.join(workingDirPath, '.git'))
 
       let subdirectoryPath = path.join(workingDirPath, 'some-dir')
@@ -38,29 +36,6 @@ describe('GitHubFile', function () {
       })
     }
 
-    function teardownWorkingDirAndRestoreFixture (fixtureName) {
-      let success = null
-
-      // On Windows, you can not remove a watched directory/file, therefore we
-      // have to close the project before attempting to delete. Unfortunately,
-      // Pathwatcher's close function is also not synchronous. Once
-      // atom/node-pathwatcher#4 is implemented this should be alot cleaner.
-      runs(() => {
-        atom.project.setPaths([])
-        let repeat = setInterval(() => {
-          try {
-            fs.removeSync(workingDirPath)
-            clearInterval(repeat)
-            success = true
-          } catch (e) {
-            success = false
-          }
-        }, 50)
-      })
-
-      waitsFor(() => success)
-    }
-
     describe('open', () => {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
@@ -69,8 +44,6 @@ describe('GitHubFile', function () {
           setupWorkingDir(fixtureName)
           setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens the GitHub.com blob URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
@@ -110,8 +83,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('opens the GitHub.com wiki URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.open()
@@ -129,8 +100,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('opens the GitHub.com blob URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.open()
@@ -145,8 +114,6 @@ describe('GitHubFile', function () {
           setupWorkingDir(fixtureName)
           setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens the GitHub.com blob URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
@@ -163,8 +130,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('opens the GitHub.com blob URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.open()
@@ -180,7 +145,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
         it('opens the GitHub.com blob URL for the file on the master branch', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.open()
@@ -196,8 +160,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('logs an error', () => {
           spyOn(atom.notifications, 'addWarning')
           githubFile.open()
@@ -207,8 +169,7 @@ describe('GitHubFile', function () {
 
       describe("when the root directory doesn't have a git repo", () => {
         beforeEach(() => {
-          teardownWorkingDirAndRestoreFixture()
-          fs.mkdirSync(workingDirPath)
+          workingDirPath = temp.mkdirSync('open-on-github-working-dir')
           setupGithubFile()
         })
 
@@ -228,8 +189,6 @@ describe('GitHubFile', function () {
           githubFile = setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('opens a GitHub enterprise style blob URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.open()
@@ -244,8 +203,6 @@ describe('GitHubFile', function () {
           setupWorkingDir(fixtureName)
           githubFile = setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens a URL that is specified by the git config', () => {
           spyOn(githubFile, 'openUrlInBrowser')
@@ -263,8 +220,6 @@ describe('GitHubFile', function () {
         setupGithubFile()
       })
 
-      afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
       it('opens the GitHub.com blob URL for the file', () => {
         spyOn(githubFile, 'openUrlInBrowser')
         githubFile.openOnMaster()
@@ -280,8 +235,6 @@ describe('GitHubFile', function () {
           setupWorkingDir(fixtureName)
           setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens the GitHub.com blame URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
@@ -307,8 +260,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('opens the GitHub.com blame URL for the file on the master branch', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.blame()
@@ -325,8 +276,6 @@ describe('GitHubFile', function () {
           setupWorkingDir(fixtureName)
           setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens the GitHub.com branch compare URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
@@ -345,8 +294,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('opens the GitHub.com history URL for the file', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.history()
@@ -361,8 +308,6 @@ describe('GitHubFile', function () {
           setupWorkingDir(fixtureName)
           setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens the GitHub.com history URL for the file on the master branch', () => {
           spyOn(githubFile, 'openUrlInBrowser')
@@ -380,8 +325,6 @@ describe('GitHubFile', function () {
         atom.config.set('open-on-github.includeLineNumbersInUrls', true)
         setupGithubFile()
       })
-
-      afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
       describe('when text is selected', () => {
         it('copies the URL to the clipboard with the selection range in the hash', () => {
@@ -407,8 +350,6 @@ describe('GitHubFile', function () {
           setupGithubFile()
         })
 
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
-
         it('opens the GitHub.com repository URL', () => {
           spyOn(githubFile, 'openUrlInBrowser')
           githubFile.openRepository()
@@ -425,8 +366,6 @@ describe('GitHubFile', function () {
           setupWorkingDir(fixtureName)
           setupGithubFile()
         })
-
-        afterEach(() => teardownWorkingDirAndRestoreFixture(fixtureName))
 
         it('opens the GitHub.com issues URL', () => {
           spyOn(githubFile, 'openUrlInBrowser')
