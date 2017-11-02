@@ -11,7 +11,6 @@ describe('GitHubFile', function () {
 
   describe('commands', () => {
     let workingDirPath
-    const filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
     function fixturePath (fixtureName) {
       return path.join(__dirname, 'fixtures', `${fixtureName}.git`)
@@ -28,9 +27,9 @@ describe('GitHubFile', function () {
       fs.writeFileSync(filePath, 'some file content')
     }
 
-    async function setupGithubFile () {
+    async function setupGithubFile (filePath = 'some-dir/some-file.md') {
       atom.project.setPaths([workingDirPath])
-      editor = await atom.workspace.open(filePathRelativeToWorkingDir)
+      editor = await atom.workspace.open(filePath)
       githubFile = GitHubFile.fromPath(editor.getPath())
       return githubFile
     }
@@ -83,6 +82,23 @@ describe('GitHubFile', function () {
           githubFile.open()
           runs(() => {
             expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/wiki/some-file')
+          })
+        })
+      })
+
+      describe('when the file is part of a GitHub gist', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile('some-file.md')
+        })
+
+        it('opens the gist.github.com URL for the file', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          githubFile.open()
+          runs(() => {
+            expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://gist.github.com/s0m3ha5h#file-some-file-md')
           })
         })
       })
