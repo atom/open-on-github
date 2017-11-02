@@ -3,6 +3,8 @@ const path = require('path')
 const temp = require('temp').track()
 const GitHubFile = require('../lib/github-file')
 
+const {it, fit, ffit, beforeEach, afterEach} = require('./async-spec-helpers') // eslint-disable-line no-unused-vars
+
 describe('GitHubFile', function () {
   let githubFile
   let editor
@@ -26,23 +28,20 @@ describe('GitHubFile', function () {
       fs.writeFileSync(filePath, 'some file content')
     }
 
-    function setupGithubFile () {
+    async function setupGithubFile () {
       atom.project.setPaths([workingDirPath])
-      waitsForPromise(() => atom.workspace.open(filePathRelativeToWorkingDir))
-
-      runs(() => {
-        editor = atom.workspace.getActiveTextEditor()
-        githubFile = GitHubFile.fromPath(editor.getPath())
-      })
+      editor = await atom.workspace.open(filePathRelativeToWorkingDir)
+      githubFile = GitHubFile.fromPath(editor.getPath())
+      return githubFile
     }
 
     describe('open', () => {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
@@ -61,16 +60,12 @@ describe('GitHubFile', function () {
         })
 
         describe("when the file has a '#' in its name", () => {
-          it('opens the GitHub.com blob URL for the file', () => {
-            waitsForPromise(() => atom.workspace.open('a/b#/test#hash.md'))
-
-            runs(() => {
-              editor = atom.workspace.getActiveTextEditor()
-              githubFile = GitHubFile.fromPath(editor.getPath())
-              spyOn(githubFile, 'openUrlInBrowser')
-              githubFile.open()
-              expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md')
-            })
+          it('opens the GitHub.com blob URL for the file', async () => {
+            editor = await atom.workspace.open('a/b#/test#hash.md')
+            githubFile = GitHubFile.fromPath(editor.getPath())
+            spyOn(githubFile, 'openUrlInBrowser')
+            githubFile.open()
+            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md')
           })
         })
       })
@@ -78,9 +73,9 @@ describe('GitHubFile', function () {
       describe('when the file is part of a GitHub wiki', () => {
         let fixtureName = 'github-remote-wiki'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com wiki URL for the file', () => {
@@ -95,9 +90,9 @@ describe('GitHubFile', function () {
       describe("when the branch has a '/' in its name", () => {
         let fixtureName = 'branch-with-slash-in-name'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
@@ -110,9 +105,9 @@ describe('GitHubFile', function () {
       describe("when the branch has a '#' in its name", () => {
         let fixtureName = 'branch-with-hash-in-name'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
@@ -125,9 +120,9 @@ describe('GitHubFile', function () {
       describe("when the remote has a '/' in its name", () => {
         let fixtureName = 'remote-with-slash-in-name'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com blob URL for the file', () => {
@@ -140,9 +135,9 @@ describe('GitHubFile', function () {
       describe('when the local branch is not tracked', () => {
         let fixtureName = 'non-tracked-branch'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com blob URL for the file on the master branch', () => {
@@ -155,9 +150,9 @@ describe('GitHubFile', function () {
       describe('when there is no remote', () => {
         let fixtureName = 'no-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('logs an error', () => {
@@ -168,9 +163,9 @@ describe('GitHubFile', function () {
       })
 
       describe("when the root directory doesn't have a git repo", () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           workingDirPath = temp.mkdirSync('open-on-github-working-dir')
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('does nothing', () => {
@@ -184,9 +179,9 @@ describe('GitHubFile', function () {
       describe('when the remote repo is not hosted on github.com', () => {
         let fixtureName = 'github-enterprise-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          githubFile = await setupGithubFile()
         })
 
         it('opens a GitHub enterprise style blob URL for the file', () => {
@@ -199,9 +194,9 @@ describe('GitHubFile', function () {
       describe('when the git config is set', () => {
         let fixtureName = 'git-config'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          githubFile = await setupGithubFile()
         })
 
         it('opens a URL that is specified by the git config', () => {
@@ -215,9 +210,9 @@ describe('GitHubFile', function () {
     describe('openOnMaster', () => {
       let fixtureName = 'non-tracked-branch'
 
-      beforeEach(() => {
+      beforeEach(async () => {
         setupWorkingDir(fixtureName)
-        setupGithubFile()
+        await setupGithubFile()
       })
 
       it('opens the GitHub.com blob URL for the file', () => {
@@ -231,9 +226,9 @@ describe('GitHubFile', function () {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com blame URL for the file', () => {
@@ -255,9 +250,9 @@ describe('GitHubFile', function () {
       describe('when the local branch is not tracked', () => {
         let fixtureName = 'non-tracked-branch'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com blame URL for the file on the master branch', () => {
@@ -272,9 +267,9 @@ describe('GitHubFile', function () {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com branch compare URL for the file', () => {
@@ -289,9 +284,9 @@ describe('GitHubFile', function () {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com history URL for the file', () => {
@@ -304,9 +299,9 @@ describe('GitHubFile', function () {
       describe('when the local branch is not tracked', () => {
         let fixtureName = 'non-tracked-branch'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com history URL for the file on the master branch', () => {
@@ -320,10 +315,10 @@ describe('GitHubFile', function () {
     describe('copyUrl', () => {
       let fixtureName = 'github-remote'
 
-      beforeEach(() => {
+      beforeEach(async () => {
         setupWorkingDir(fixtureName)
         atom.config.set('open-on-github.includeLineNumbersInUrls', true)
-        setupGithubFile()
+        await setupGithubFile()
       })
 
       describe('when text is selected', () => {
@@ -345,9 +340,9 @@ describe('GitHubFile', function () {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com repository URL', () => {
@@ -362,9 +357,9 @@ describe('GitHubFile', function () {
       describe('when the file is openable on GitHub.com', () => {
         let fixtureName = 'github-remote'
 
-        beforeEach(() => {
+        beforeEach(async () => {
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          await setupGithubFile()
         })
 
         it('opens the GitHub.com issues URL', () => {
@@ -448,15 +443,11 @@ describe('GitHubFile', function () {
     })
   })
 
-  it('activates when a command is triggered on the active editor', () => {
+  it('activates when a command is triggered on the active editor', async () => {
     const activationPromise = atom.packages.activatePackage('open-on-github')
 
-    waitsForPromise(() => atom.workspace.open())
-
-    runs(() => {
-      atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-github:file')
-    })
-
-    waitsForPromise(() => activationPromise)
+    await atom.workspace.open()
+    atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-github:file')
+    await activationPromise
   })
 })
