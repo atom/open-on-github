@@ -167,7 +167,7 @@ describe('GitHubFile', function () {
           await setupGithubFile()
         })
 
-        it('logs an error', () => {
+        it('shows a warning', () => {
           spyOn(atom.notifications, 'addWarning')
           githubFile.open()
           expect(atom.notifications.addWarning).toHaveBeenCalledWith('No URL defined for remote: null')
@@ -305,6 +305,40 @@ describe('GitHubFile', function () {
           expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md')
         })
       })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.blame()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Blames do not exist for wikis')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.blame()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Blames do not exist for gists')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
+        })
+      })
     })
 
     describe('branchCompare', () => {
@@ -320,6 +354,40 @@ describe('GitHubFile', function () {
           spyOn(githubFile, 'openURLInBrowser')
           githubFile.openBranchCompare()
           expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/compare/master')
+        })
+      })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.openBranchCompare()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Branches do not exist for wikis')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.openBranchCompare()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Branches do not exist for gists')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
         })
       })
     })
@@ -513,6 +581,40 @@ describe('GitHubFile', function () {
           expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/issues')
         })
       })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.openIssues()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Issues do not exist for wikis')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.openIssues()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Issues do not exist for gists')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
+        })
+      })
     })
 
     describe('openPullRequests', () => {
@@ -528,6 +630,40 @@ describe('GitHubFile', function () {
           spyOn(githubFile, 'openURLInBrowser')
           githubFile.openPullRequests()
           expect(githubFile.openURLInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/pulls')
+        })
+      })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-wiki'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.openPullRequests()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Pull requests do not exist for wikis')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('when the file is part of a GitHub wiki', () => {
+        let fixtureName = 'github-remote-gist'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('shows a warning and does not attempt to open a URL', () => {
+          spyOn(githubFile, 'openURLInBrowser')
+          spyOn(atom.notifications, 'addWarning')
+          githubFile.openPullRequests()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith('Pull requests do not exist for gists')
+          expect(githubFile.openURLInBrowser).not.toHaveBeenCalled()
         })
       })
     })
