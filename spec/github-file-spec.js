@@ -369,6 +369,23 @@ describe('GitHubFile', function () {
         })
       })
     })
+
+    describe('openPullRequests', () => {
+      describe('when the file is openable on GitHub.com', () => {
+        let fixtureName = 'github-remote'
+
+        beforeEach(async () => {
+          setupWorkingDir(fixtureName)
+          await setupGithubFile()
+        })
+
+        it('opens the GitHub.com pull requests URL', () => {
+          spyOn(githubFile, 'openUrlInBrowser')
+          githubFile.openPullRequests()
+          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith('https://github.com/some-user/some-repo/pulls')
+        })
+      })
+    })
   })
 
   describe('githubRepoUrl', () => {

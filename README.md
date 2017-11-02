@@ -11,6 +11,7 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 - Open the blame view for the file on github.com <kbd>alt-g, b</kbd>
 - Open the history view for the file on github.com <kbd>alt-g, h</kbd>
 - Open the issues view for the repository the file belongs to on github.com <kbd>alt-g, i</kbd>
+- Open the pull requests view for the repository the file belongs to on github.com <kbd>alt-g, p</kbd>
 - Open the compare page for the current branch on github.com <kbd>alt-g, r</kbd>
 - Copy the github.com URL for the currently selected lines <kbd>alt-g, c</kbd>
 

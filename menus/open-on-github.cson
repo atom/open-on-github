@@ -11,6 +11,7 @@
         { 'label': 'File on Master', 'command': 'open-on-github:file-on-master' }
         { 'label': 'History', 'command': 'open-on-github:history' }
         { 'label': 'Issues', 'command': 'open-on-github:issues' }
+        { 'label': 'Pull Requests', 'command': 'open-on-github:pull-requests' }
         { 'label': 'Repository', 'command': 'open-on-github:repository' }
       ]
     ]
