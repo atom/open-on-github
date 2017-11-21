@@ -746,6 +746,13 @@ describe('GitHubFile', function () {
     })
   })
 
+  describe('when determining whether a repository is a Gist repository or not', () => {
+    it('does not throw when the repository URL is a Bitbucket URL (regression)', () => {
+      githubFile.gitURL = () => 'https://bitbucket.org/somebody/repo.git'
+      expect(githubFile.isGistURL()).toBe(false)
+    })
+  })
+
   it('activates when a command is triggered on the active editor', async () => {
     const activationPromise = atom.packages.activatePackage('open-on-github')
 
