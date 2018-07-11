@@ -45,6 +45,15 @@
       "default": true,
       "type": "boolean",
       "description": "Include the line range selected in the editor when opening or copying URLs to the clipboard. When opened in the browser, the GitHub page will automatically scroll to the selected line range."
+    },
+    "lineNumberInUrlStyle": {
+        "default": "Github",
+        "type": "string",
+        "enum": [
+            {"value": "Github", "description": "Github style line numbering in URL: #L123-L124"},
+            {"value": "Gitlab", "description": "Gitlab style line numbering in URL: #L123-124"}
+        ],
+        "description": "Only applicable if include line numbers in Urls is enabled."
     }
   }
 }
