@@ -1,5 +1,5 @@
 # Open on GitHub package
-[![OS X Build Status](https://travis-ci.org/atom/open-on-github.svg?branch=master)](https://travis-ci.org/atom/open-on-github) [![Windows Build Status](https://ci.appveyor.com/api/projects/status/ccl6na4qsna5wncr/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/open-on-github/branch/master) [![Dependency Status](https://david-dm.org/atom/open-on-github.svg)](https://david-dm.org/atom/open-on-github)
+[![CI](https://github.com/atom/open-on-github/actions/workflows/ci.yml/badge.svg)](https://github.com/atom/open-on-github/actions/workflows/ci.yml)
 
 Provides commands to quickly view the current file on GitHub.com (The Website).
 
