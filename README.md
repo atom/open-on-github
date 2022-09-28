@@ -1,4 +1,5 @@
-# Open on GitHub package
+##### Atom and all repositories under Atom will be archived on December 15, 2022. Learn more in our [official announcement](https://github.blog/2022-06-08-sunsetting-atom/)
+ # Open on GitHub package
 [![CI](https://github.com/atom/open-on-github/actions/workflows/ci.yml/badge.svg)](https://github.com/atom/open-on-github/actions/workflows/ci.yml)
 
 Provides commands to quickly view the current file on GitHub.com (The Website).
